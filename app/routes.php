@@ -11,15 +11,27 @@
 |
 */
 
-Route::get('/', function()
-{
-	echo 'hello';
-});
+Route::get('dashboard', array('uses' => 'HomeController@displayDashboard'));
 
-Route::get('/home', ('HomeController@showWelcome'));
+Route::get('', ('HomeController@showWelcome'));
 
-Route::get('/user', ('UserController@index'));
+//get login form
+
+Route::get('login', array('uses' => 'HomeController@showLogin'));
+
+// route to process the form
+Route::post('login', array('uses' => 'HomeController@doLogin'));
 
 
+// route to process the logout
+Route::get('logout', array('uses' => 'HomeController@doLogout'));
 
 
+//get Registration form
+
+Route::get('register', array('uses' => 'HomeController@showRegister'));
+
+
+//process Registration form
+
+Route::post('register', array('uses' => 'HomeController@doRegister'));
