@@ -78,4 +78,15 @@ App::down(function()
 |
 */
 
+
+/**return custom 404 error**/
+
+App::missing(function() {
+	
+return View::make('404error');
+
+});
+
+
+/**End of custom 404 erro call**/
 require app_path().'/filters.php';
