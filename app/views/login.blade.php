@@ -10,26 +10,31 @@
 	<p>
     {{ $errors->first('email') }}
     {{ $errors->first('password') }}
+    
+    @if(isset($msg) && $msg!='')
+    {{$msg}}
+    @endif
+    
 	</p>
-			<p>
+			<div class="form-group">
     {{ Form::label('email', 'Email Address') }}
-    {{ Form::text('email', Input::old('email'), array('placeholder' => 'awesome@awesome.com')) }}
-	</p>
-	<p>
-	{{ Form::label('password', 'Password') }}
-    {{ Form::password('password') }}
-		</p>	
+   
+    <?php echo Form::email('email',$value=null, $attributes = array('class'=>'form-control', 'width'=>'500')); ?>
+    
+	</div>
+	<div class="form-group">
+		{{ Form::label('password', 'Password') }}
+       <?php echo Form::password('password',array('class'=>'form-control')); ?>
+    
+		</div>	
 			
-		<p>{{ Form::submit('Submit!') }}</p>
+		<div class="form-group">
+			<?php echo Form::submit('Login', array('class'=>'btn btn-lg btn-primary')) ; ?>
 			{{ Form::close() }}	
 		
 	</div>
 @stop
 
-@section('sidebar')
-
-<div>Its my side  bar content</div>
-@stop
 
 
 

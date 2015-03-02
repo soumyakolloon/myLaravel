@@ -29,4 +29,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 // Rest of class cut-off for brevity
 
+
+
+
 }

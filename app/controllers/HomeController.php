@@ -17,7 +17,7 @@ class HomeController extends BaseController {
 
 	public function showWelcome()
 	{
-		return View::make('hello');
+		return View::make('dashboard');
 	}
 	
 	
@@ -40,15 +40,16 @@ class HomeController extends BaseController {
 	
 	
 	
-	/**Do the Login form*/
+/**Do the Login form*/
 	
-	public function doLogin()
+public function doLogin()
 {
+
 // validate the info, create rules for the inputs
 $rules = array(
     'email'    => 'required|email', // make sure the email is an actual email
     'password' => 'required|alphaNum|min:3' // password can only be alphanumeric and has to be greater than 3 characters
-);
+	);
 
 // run the validation rules on the inputs from the form
 $validator = Validator::make(Input::all(), $rules);
@@ -61,29 +62,33 @@ if ($validator->fails()) {
 } else {
 
     // create our user data for the authentication
-    $userdata = array(
+  		$userdata = array(
         'email'     => Input::get('email'),
-        'password'  => Input::get('password')
-    );
-
+        'password'  => Input::get('password'));
+	
+	
+	
     // attempt to do the login
     if (Auth::attempt($userdata)) {
-
-        // validation successful!
+			
         // redirect them to the secure section or whatever
         return View::make('dashboard');
         // for now we'll just echo success (even though echoing in a controller is bad)
        
-
+	
     } else {        
 
-        // validation not successful, send back to form 
-        return Redirect::to('login');
+      
+      // validation not successful, send back to form 
+      $message = "Invalid Username/ password";
+     return View::make('login')->with('msg', $message);
+      
 
     }
 
-}
-}
+  }
+
+ }
 
 /**Process registration*/
 public function doRegister()
@@ -124,8 +129,8 @@ if ($validator->fails()) {
    //  User::where('email', '=', Input::get('email'))->where('password', '=', Hash::make(Input::get('password')))->first();
 	
 	//print_r(count($userExist)); die();	
-		if(count($userExist)==0)
-		{
+	if(count($userExist)==0)
+	{
     if($userObj->save())
     {
 		
