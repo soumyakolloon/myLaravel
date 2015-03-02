@@ -13,7 +13,7 @@
 
 Route::get('dashboard', array('uses' => 'HomeController@displayDashboard'));
 
-Route::get('', ('HomeController@showWelcome'));
+Route::get(' ', ('HomeController@showWelcome'));
 
 //get login form
 
