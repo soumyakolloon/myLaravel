@@ -7,28 +7,36 @@
 		@endif
 			
 			{{ Form::open(array('url' => 'register')) }}
-			<h1>Registration</h1>
+			<h2>Registration</h2>
 			<!-- if there are login errors, show them here -->
-	<p>
+	
+	<div class="form-group">
+		
     {{ $errors->first('email') }}
     {{ $errors->first('password') }}
      {{ $errors->first('name') }}
-	</p>
-	<p>
+	</div>
+	
+	<div class="form-group">
+		
 	{{ Form::label('Name', 'Your Name') }}
     {{ Form::text('name', Input::old('name'), array('placeholder'=>'Your name')) }}
-		</p>	
+	</div>	
 		
-	<p>
+	<div class="form-group">
+		
     {{ Form::label('email', 'Email Address') }}
     {{ Form::text('email', Input::old('email'), array('placeholder' => 'awesome@awesome.com')) }}
-	</p>
-	<p>
+	</div>
+	
+	<div class="form-group">
+		
 	{{ Form::label('password', 'Password') }}
     {{ Form::password('password') }}
-		</p>	
+		</div>	
 			
-		<p>{{ Form::submit('Register!') }}</p>
+		<div class="form-group">
+		<?php echo Form::submit('Login', array('class'=>'btn btn-lg btn-primary')) ; ?>
 			{{ Form::close() }}	
 		
 	</div>
