@@ -7,6 +7,8 @@ class HomeController extends BaseController {
 	| Default Home Controller
 	|--------------------------------------------------------------------------
 	|
+		Author: Soumya Kolloon
+	-------------------
 	| You may wish to use controllers instead of, or in addition to, Closure
 	| based routes. That's great! Here is an example controller method to
 	| get you started. To route to this controller, just add the route:
@@ -162,6 +164,130 @@ if ($validator->fails()) {
 
 }
 
+
+/**Add new Company form display
+* @Date: 09-03-2015
+***/
+public function showAddCompany()
+{
+	return View::make('add_company');
+}
+
+
+/**Add new Company form processing
+* @Date: 09-03-2015
+***/
+public function doAddCompany()
+{
+	$rules = array(
+    'company_name'    => 'required', 
+    'description'    => 'required',
+    'country'    => 'required',
+    'city'    => 'required',
+	'address'    => 'required',
+
+    
+);
+
+// run the validation rules on the inputs from the form
+$validator = Validator::make(Input::all(), $rules);
+
+// if the validator fails, redirect back to the form
+if ($validator->fails()) {
+    return Redirect::to('add_company')
+        ->withErrors($validator)
+        ->withInput(); // send back all errors to the login form
+       
+}
+else
+{
+
+	/**Save the data on sccessful validation***/
+
+	$companydata = array(
+        'company_name'     => Input::get('company_name'),
+        'description'  => Input::get('description'),
+        'country'  => Input::get('country'),
+        'city'  => Input::get('city'),
+        'address'  => Input::get('address'),
+
+    	);
+    
+	//print_r(Auth::user()->id); exit;
+
+    $compObj = new Company();
+   
+    $compObj->company_name = $companydata['company_name'];
+    $compObj->description = $companydata['description'];
+    $compObj->country = $companydata['country'];
+    $compObj->city = $companydata['city'];
+    $compObj->address = $companydata['address'];
+    $compObj->userid = Auth::user()->id;
+
+
+
+     $companyExist = DB::table('company')
+                    ->where('company_name', '=', Input::get('company_name'))
+                    ->get();
+
+     if(count($companyExist)==0)
+     {
+	//print_r($compObj); exit;
+    if($compObj->save())
+
+    	return View::make('add_company')
+    	->with('message', 'Company added successfully.');
+
+    	 
+    }
+    else
+    {
+    	
+    	return View::make('add_company')->with('emessage', 'Wohoo!!! company already added.')->withInput(Input::all());
+    }
+
+
+	//return View::make('add_company');
+}
+
+
+	
+}
+
+
+/**Display list of companies of logged in user
+* @Date: 09-03-2015
+***/
+public function showCompanies()
+{
+	$list_companies = DB::table('company')
+                    ->where('userid', '=', Auth::user()->id)
+                    ->get();
+
+
+	return View::make('list_company')->with(array('list_comp' =>$list_companies));
+}
+
+
+/****/
+/**Display particular company info
+* @Date: 09-03-2015
+***/
+public function showCompanyInfo($id)
+{
+
+$company_info = DB::table('company')
+                    ->where('userid', '=', Auth::user()->id)
+                    ->Where('id', '=', $id)
+                    ->get();
+
+return View::make('company_info')->with(array('company_info' => $company_info));
+
+}
+
+
+
+
 /**Dashboard page**/
 
 public function displayDashboard()
@@ -178,6 +304,7 @@ public function doLogout()
     Auth::logout(); // log the user out of our application
     return View::make('dashboard');// redirect the user to the login screen
 }
+
 
 
 

@@ -20,19 +20,19 @@
 	<div class="form-group">
 		
 	{{ Form::label('Name', 'Your Name') }}
-    {{ Form::text('name', Input::old('name'), array('placeholder'=>'Your name')) }}
+    {{ Form::text('name', Input::old('name'), $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder'=>'Your name')) }}
 	</div>	
 		
 	<div class="form-group">
 		
     {{ Form::label('email', 'Email Address') }}
-    {{ Form::text('email', Input::old('email'), array('placeholder' => 'awesome@awesome.com')) }}
+    {{ Form::text('email', Input::old('email'), $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder' => 'awesome@awesome.com')) }}
 	</div>
 	
 	<div class="form-group">
 		
 	{{ Form::label('password', 'Password') }}
-    {{ Form::password('password') }}
+    {{ Form::password('password', array('class'=>'form-control')) }}
 		</div>	
 			
 		<div class="form-group">

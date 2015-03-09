@@ -35,3 +35,20 @@ Route::get('register', array('uses' => 'HomeController@showRegister'));
 //process Registration form
 
 Route::post('register', array('uses' => 'HomeController@doRegister'));
+
+
+//get Add Company Form
+
+Route::get('add_company', array('uses' => 'HomeController@showAddCompany'));
+
+//process Add Company form
+
+Route::post('add_company', array('uses' => 'HomeController@doAddCompany'));
+
+//get list Companies of a user
+
+Route::get('list_company', array('uses' => 'HomeController@showCompanies'));
+
+//get a company info
+
+Route::get('company_info/id/{id}',array('uses' => 'HomeController@showCompanyInfo'));

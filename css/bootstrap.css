@@ -6564,3 +6564,53 @@ button.close {
   }
 }
 /*# sourceMappingURL=bootstrap.css.map */
+
+
+        body {
+                padding-top: 60px;
+            }
+/**custom style added by @author: Soumya Kolloon 
+** Date 09/03/2015
+** Mtree style starts here
+**/
+
+      .mtree-demo{
+
+        float:left;
+        width:252px;
+      }
+      .mtree-demo .mtree {
+        background: #EEE;
+        margin: 20px auto;
+        max-width: 320px;
+        border-radius: 3px;
+      }
+
+      .mtree-skin-selector {
+        text-align: center;
+        background: #EEE;
+        padding: 10px 0 15px;
+      }
+
+      .mtree-skin-selector li {
+        display: inline-block;
+        float: none;
+      }
+
+      .mtree-skin-selector button {
+        padding: 5px 10px;
+        margin-bottom: 1px;
+        background: #BBB;
+      }
+
+      .mtree-skin-selector button:hover { background: #999; }
+
+      .mtree-skin-selector button.active {
+        background: #999;
+        font-weight: bold;
+      }
+
+      .mtree-skin-selector button.csl.active { background: #FFC000; } 
+/*
+** Mtree style ends here @Soumya Kolloon
+**/
