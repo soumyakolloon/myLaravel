@@ -15,6 +15,7 @@
     {{ $errors->first('email') }}
     {{ $errors->first('password') }}
      {{ $errors->first('name') }}
+     {{ $errors->first('empcode') }}
 	</div>
 	
 	<div class="form-group">
@@ -23,6 +24,12 @@
     {{ Form::text('name', Input::old('name'), $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder'=>'Your name')) }}
 	</div>	
 		
+	<div class="form-group">
+		
+    {{ Form::label('Employee Code', 'Employee Code') }}
+    {{ Form::text('empcode', Input::old('empcode'), $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder' => 'Employee Code')) }}
+	</div>
+
 	<div class="form-group">
 		
     {{ Form::label('email', 'Email Address') }}

@@ -41,14 +41,25 @@ Route::post('register', array('uses' => 'HomeController@doRegister'));
 
 Route::get('add_company', array('uses' => 'HomeController@showAddCompany'));
 
+
+//edit a company info
+
+Route::get('add_company/id/{id}',array('uses' => 'HomeController@editCompany'));
+
+
 //process Add Company form
 
 Route::post('add_company', array('uses' => 'HomeController@doAddCompany'));
+
 
 //get list Companies of a user
 
 Route::get('list_company', array('uses' => 'HomeController@showCompanies'));
 
-//get a company info
+//Get a company info by id
 
 Route::get('company_info/id/{id}',array('uses' => 'HomeController@showCompanyInfo'));
+
+//Delete a company
+
+Route::get('delete_company/id/{id}',array('uses' => 'HomeController@showCompanies'));

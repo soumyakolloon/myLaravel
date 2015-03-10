@@ -99,7 +99,8 @@ public function doRegister()
 $rules = array(
     'email'    => 'required|email', // make sure the email is an actual email
     'password' => 'required|alphaNum|min:3', // password can only be alphanumeric and has to be greater than 3 characters
-    'name' => 'required|alphaNum'
+    'name' => 'required|alphaNum',
+    'empcode'=> 'required |numeric'
 );
 
 // run the validation rules on the inputs from the form
@@ -115,17 +116,20 @@ if ($validator->fails()) {
 	$userdata = array(
         'email'     => Input::get('email'),
         'password'  => Hash::make(Input::get('password')),
-    
+        'name' => Input::get('name'),
+        'empcode' => Input::get('empcode'),
 			);
     
     $userObj = new User();
     
     $userObj->email = $userdata['email'];
     $userObj->password = $userdata['password'];
+    $userObj->name = $userdata['name'];
+    $userObj->emp_code = $userdata['empcode'];
     
     $userExist = $users = DB::table('users')
                     ->where('email', '=', Input::get('email'))
-                    ->orWhere('password', '=', Hash::make(Input::get('password')))
+                    ->where('emp_code', '=', Input::get('empcode'))
                     ->get();
     
    //  User::where('email', '=', Input::get('email'))->where('password', '=', Hash::make(Input::get('password')))->first();
@@ -172,6 +176,31 @@ public function showAddCompany()
 {
 	return View::make('add_company');
 }
+
+/*Edit a company form**/
+/**Add new Company form display
+* @Date: 09-03-2015
+***/
+
+public function editCompany($id)
+{
+
+    $company_info = DB::table('company')
+                    ->where('userid', '=', Auth::user()->id)
+                    ->Where('id', '=', $id)
+                    ->get();
+
+   if(!empty($company_info))
+
+    return View::make('add_company')->with(array('company_info' =>  $company_info));
+    
+    else
+
+    return View::make('add_company')->with(array('emessage' =>  "ooph!!! No active company available with the selected name"));
+
+}
+
+
 
 
 /**Add new Company form processing
@@ -223,15 +252,45 @@ else
     $compObj->city = $companydata['city'];
     $compObj->address = $companydata['address'];
     $compObj->userid = Auth::user()->id;
+    $compObj->status =1;
 
 
+      /**Check the data came for updation or addition*/
 
+        if(Input::get('company_id') && Input::get('company_id')!= "")
+    {
+        /**Update the edited content**/
+
+            $company_id = Input::get('company_id');
+
+
+            Company::where('id', $company_id)->update(array(
+            'company_name'    =>  $companydata['company_name'],
+            'address' =>  $companydata['address'],
+            'description' => $companydata['description'],
+            'city'  => $companydata['city'],
+            'country' => $companydata['country'],
+            'userid'  => Auth::user()->id,
+        ));
+
+            return View::make('add_company')
+        ->with('message', 'Company details updated successfully.')->withInput(Input::all());
+        
+    }
+
+    else
+    {
      $companyExist = DB::table('company')
                     ->where('company_name', '=', Input::get('company_name'))
                     ->get();
 
+    
+
      if(count($companyExist)==0)
      {
+
+      
+    
 	//print_r($compObj); exit;
     if($compObj->save())
 
@@ -242,9 +301,14 @@ else
     }
     else
     {
-    	
-    	return View::make('add_company')->with('emessage', 'Wohoo!!! company already added.')->withInput(Input::all());
+     return View::make('add_company')->with('emessage', 'Wohoo!!! company already added.')->withInput(Input::all());
     }
+
+    	}
+    	
+    
+
+    
 
 
 	//return View::make('add_company');
@@ -258,14 +322,28 @@ else
 /**Display list of companies of logged in user
 * @Date: 09-03-2015
 ***/
-public function showCompanies()
+public function showCompanies($id=null)
 {
+    
+    if($id!=null)
+    {
+    $delete_company_info = DB::table('company')->where('id', '=', $id)->delete();
+    }
+
+
 	$list_companies = DB::table('company')
                     ->where('userid', '=', Auth::user()->id)
+                    ->where('status', '=', 1)
                     ->get();
 
+    if(isset($delete_company_info) && $delete_company_info==1 )
 
-	return View::make('list_company')->with(array('list_comp' =>$list_companies));
+        $message = "Company deleted successfully";
+
+    else
+        $message ='';
+
+	return View::make('list_company')->with(array('list_comp' =>$list_companies))->with('message', $message);
 }
 
 
@@ -275,6 +353,7 @@ public function showCompanies()
 ***/
 public function showCompanyInfo($id)
 {
+
 
 $company_info = DB::table('company')
                     ->where('userid', '=', Auth::user()->id)
@@ -305,6 +384,27 @@ public function doLogout()
     return View::make('dashboard');// redirect the user to the login screen
 }
 
+
+
+
+/**
+* @ Soumya Kolloon
+* @Date: 10/03/2015
+* To rmeove a company info from a click
+*
+**/
+
+public function deleteCompanyInfo($id)
+{
+   
+    $delete_company_info = DB::table('company')->where('id', '=', $id)->delete();
+
+               
+    if($delete_company_info)
+        echo "Deleted Successfully";
+    //return View::make('')->with(array('message' => 'company deleted successfully'));
+
+}
 
 
 

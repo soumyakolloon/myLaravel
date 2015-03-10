@@ -31,7 +31,7 @@
 					@else
 					</ul>
 					<p class="nav navbar-nav" style="float:right; margin-left:900px;">
-					{{Auth::user()->email}}
+					Welcome {{Auth::user()->name}}
 					<a href="{{ URL::to('logout') }}">Logout</a>
 					</p>
 					@endif
@@ -44,6 +44,7 @@
  <ul class="mtree transit">
       <li><a href="{{ URL::to('list_company') }}">My Company</a>
       <ul>
+         <li><a href="{{ URL::to('list_company') }}">My Companies</a> </li>
         <li><a href="{{ URL::to('add_company') }}">Add Company</a>  </li>
         <li><a href="#">Users</a>
           <ul>
@@ -102,33 +103,20 @@ $(document).ready(function() {
     s.find('ul').append('<li>' + val + '</li>');
   });
   
-  s.find('button.skin').each(function(index){
-    $(this).on('click.mtree-skin-selector', function(){
-      s.find('button.skin.active').removeClass('active');
-      $(this).addClass('active');
-      mtree.removeClass(skins.join(' ')).addClass(skins[index]);
-    });
-  })
-  s.find('button:first').addClass('active');
-  s.find('.csl').on('click.mtree-close-same-level', function(){
-    $(this).toggleClass('active'); 
-  });
+  // s.find('button.skin').each(function(index){
+  //   $(this).on('click.mtree-skin-selector', function(){
+  //    // s.find('button.skin.active').removeClass('active');
+  //     $(this).addClass('active');
+  //   //  mtree.removeClass(skins.join(' ')).addClass(skins[index]);
+  //   });
+  // })
+  // s.find('button:first').addClass('active');
+  // s.find('.csl').on('click.mtree-close-same-level', function(){
+  //   $(this).toggleClass('active'); 
+  // });
 });
 </script>
-<script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-36251023-1']);
-  _gaq.push(['_setDomainName', 'jqueryscript.net']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
 
 
 
