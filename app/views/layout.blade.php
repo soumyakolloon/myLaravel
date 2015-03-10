@@ -6,10 +6,10 @@
 	
 	<!--	<link rel="stylesheet" href='../css/bootstrap.min.css'>-->
 	
-	<link rel="stylesheet" href='../css/bootstrap.css'>
+	<link rel="stylesheet" href='{{URL::to('/')}}/css/bootstrap.css'>
   <link rel='stylesheet prefetch' href='https://cdn.jsdelivr.net/foundation/5.0.2/css/foundation.css'>
-  <link href="../css/mtree.css" rel="stylesheet" type="text/css">
-      
+  <link href="{{URL::to('/')}}/css/mtree.css" rel="stylesheet" type="text/css">
+     {{ asset('css/mtree.css') }} 
 </head>
   <body>
 	  
@@ -79,15 +79,15 @@
 
 
   <!-- Scripts are placed here -->
-      <script  src='../js/jquery-1.10.2.js'></script>
+      <script  src='{{URL::to('/')}}/js/jquery-1.10.2.js'></script>
     
-	     <script  src='../js/bootstrap.js'></script>
+	     <script  src='{{URL::to('/')}}/js/bootstrap.js'></script>
 
 
 
 <script src='http://cdnjs.cloudflare.com/ajax/libs/velocity/0.2.1/jquery.velocity.min.js'></script> 
 
-<script src="../js/mtree.js"></script> 
+<script src="{{URL::to('/')}}/js/mtree.js"></script> 
 <script>
 $(document).ready(function() {
   var mtree = $('ul.mtree');
