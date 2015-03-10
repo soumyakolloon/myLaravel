@@ -49,11 +49,11 @@
         <li><a href="#">Users</a>
           <ul>
       <li><a href="#">Deactivated Users</a></li>
-      <li><a href="#">Add User</a></li>
+      <li><a href="{{ URL::to('register') }}">Add User</a></li>
           </ul>
         </li>
 
-         <li><a href="#">Archived Companies</a></li>
+         <li><a href="{{ URL::to('list_company/action/archive') }}">Archived Companies</a></li>
            
           </ul>
         </li>

@@ -60,6 +60,20 @@ Route::get('list_company', array('uses' => 'HomeController@showCompanies'));
 
 Route::get('company_info/id/{id}',array('uses' => 'HomeController@showCompanyInfo'));
 
-//Delete a company
+//Delete a company by id
 
-Route::get('delete_company/id/{id}',array('uses' => 'HomeController@showCompanies'));
+Route::get('delete_company/action/{delete}/id/{id}',array('uses' => 'HomeController@showCompanies'));
+
+//Archive the company by id
+
+Route::get('archive_company/action/{action}/id/{id}',array('uses' => 'HomeController@showCompanies'));
+
+//Active the company by id
+
+Route::get('active_company/action/{action}/id/{id}',array('uses' => 'HomeController@showArchives'));
+
+//List of company archives
+
+Route::get('list_company/action/{archive}',array('uses' => 'HomeController@showArchives'));
+
+
