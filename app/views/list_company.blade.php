@@ -32,7 +32,7 @@
 
 <td>
 	@if($lc->status==1)
-	<a href="/id/<?php echo $lc->id; ?>">Edit</a> | 
+	<a href="{{URL::to('add_company')}}/id/<?php echo $lc->id; ?>">Edit</a> | 
 	@endif
 	<a onClick="javascript:ConfirmDelete('delete', {{$lc->id}});">Delete</a>
 	@if($lc->status==1)

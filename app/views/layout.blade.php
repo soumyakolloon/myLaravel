@@ -48,6 +48,7 @@
         <li><a href="{{ URL::to('add_company') }}">Add Company</a>  </li>
         <li><a href="#">Users</a>
           <ul>
+      <li><a href="{{URL::to('list_users')}}">Active Users</a></li>
       <li><a href="#">Deactivated Users</a></li>
       <li><a href="{{ URL::to('register') }}">Add User</a></li>
           </ul>

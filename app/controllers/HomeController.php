@@ -67,7 +67,9 @@ return Redirect::to('login')
 // create our user data for the authentication
 $userdata = array(
 'email'     => Input::get('email'),
-'password'  => Input::get('password'));
+'password'  => Input::get('password'),
+'status' => 1,
+);
 
 
 
@@ -136,7 +138,7 @@ $userObj->status =1;
 $userExist = $users = DB::table('users')
         ->where('email', '=', Input::get('email'))
         ->where('emp_code', '=', Input::get('empcode'))
-        
+
         ->get();
 
 //  User::where('email', '=', Input::get('email'))->where('password', '=', Hash::make(Input::get('password')))->first();
@@ -149,16 +151,17 @@ if($userObj->save())
 {
 
 
-$uu = array(
-'email'     => Input::get('email'),
-'password'  => Input::get('password'),
-	);
+// $uu = array(
+// 'email'     => Input::get('email'),
+// 'password'  => Input::get('password'),
+// 	'status' => 1, 
+//     );
 
 
-Auth::attempt($uu);
+// Auth::attempt($uu);
 
 
-return View::make('dashboard');
+return View::make('register')->with('message','User added successfully');
 
 
 }
@@ -455,20 +458,26 @@ Auth::logout(); // log the user out of our application
 return View::make('dashboard');// redirect the user to the login screen
 }
 
-/***
+/*
 
-@author: soumyakolloon
+*@author: soumyakolloon
 @date: 10/03/2015
 Display form for adding new User
 
-***/
+**/
 
-// public function showAddUser()
-// {
+public function showUsers()
+{
 
-// return View::make('registration');
+$user_list = DB::table('users')
+        ->where('role', '=', '2')
+        ->Where('status', '=','1')
+        ->get();
 
-// }
+
+return View::make('list_users', array('user_list' => $user_list));
+
+}
 
 
 }

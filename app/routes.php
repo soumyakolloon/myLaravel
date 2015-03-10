@@ -76,4 +76,13 @@ Route::get('active_company/action/{action}/id/{id}',array('uses' => 'HomeControl
 
 Route::get('list_company/action/{archive}',array('uses' => 'HomeController@showArchives'));
 
+//Get List of users
+
+Route::get('list_users',array('uses' => 'HomeController@showUsers'));
+
+
+
+
+
+
 
