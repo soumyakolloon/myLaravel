@@ -30,6 +30,27 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 // Rest of class cut-off for brevity
 
 
+/*
+
+@Soumya Kolloon
+Added RBAC module funcitonality
+
+*
+*/
+
+public function roles() {
+        return $this->belongsToMany('Role');
+    }
+
+public function hasRole($key)
+    {
+        foreach ($this->roles as $role) {            
+            if ($role->role_name === $key) {
+                return true;
+            }
+        }        
+        return false;
+    }   
 
 
 }

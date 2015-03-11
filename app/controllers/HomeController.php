@@ -19,7 +19,9 @@ Author: Soumya Kolloon
 
 public function showWelcome()
 {
-return View::make('dashboard');
+
+return View::make('bridge_info');
+
 }
 
 
@@ -68,7 +70,7 @@ return Redirect::to('login')
 $userdata = array(
 'email'     => Input::get('email'),
 'password'  => Input::get('password'),
-'status' => 1,
+
 );
 
 
@@ -76,8 +78,10 @@ $userdata = array(
 // attempt to do the login
 if (Auth::attempt($userdata)) {
 
+
+
 // redirect them to the secure section or whatever
-return View::make('dashboard');
+return View::make('bridge_info');
 // for now we'll just echo success (even though echoing in a controller is bad)
 
 
@@ -100,12 +104,30 @@ return View::make('login')->with('msg', $message);
 public function doRegister()
 {
 // validate the info, create rules for the inputs
+
+if(Input::get('user_id') && Input::get('user_id')!= "")
+{
+
+$rules = array(
+'email'    => 'required|email', // make sure the email is an actual email
+
+'name' => 'required',
+'empcode'=> 'required |numeric'
+);
+
+}
+else
+{
+
 $rules = array(
 'email'    => 'required|email', // make sure the email is an actual email
 'password' => 'required|alphaNum|min:3', // password can only be alphanumeric and has to be greater than 3 characters
-'name' => 'required|alphaNum',
+'name' => 'required',
 'empcode'=> 'required |numeric'
 );
+}
+
+
 
 // run the validation rules on the inputs from the form
 
@@ -117,23 +139,73 @@ if ($validator->fails()) {
 return Redirect::to('register')
 ->withErrors($validator) // send back all errors to the login form
 ->withInput(Input::except('password')); // send back the input (not the password) so that we can repopulate the form
-} else {
+} 
+
+else 
+{
+
+/*
+Check request came form edit form or create form
+**/
+$userObj = new User();
+
+if(Input::get('user_id') && Input::get('user_id')!= "")
+{
+
+$userdata = array(
+'email'     => Input::get('email'),
+'first_name' => Input::get('name'),
+'empcode' => Input::get('empcode'),
+);
+
+$user_id = Input::get('user_id');
+
+$nameArr = explode(' ', $userdata['first_name']);
+
+
+
+
+User::where('id', $user_id)->update(array(
+'first_name'    =>  $nameArr[0],
+'last_name' => $nameArr[1],
+'email' =>  $userdata['email'],
+'emp_code' => $userdata['empcode'],
+'status' => 1,
+));
+
+
+
+$user_list = DB::table('users')
+       // ->where('role', '=', '2')
+        ->Where('Status', '=','1')
+        ->get();
+
+        // echo '<pre>';
+        // print_r($user_list); exit;
+
+return View::make('list_users', array('user_list' => $user_list));
+
+}
+else
+{
 
 $userdata = array(
 'email'     => Input::get('email'),
 'password'  => Hash::make(Input::get('password')),
-'name' => Input::get('name'),
+'first_name' => Input::get('name'),
 'empcode' => Input::get('empcode'),
+'status' => 1,
 );
 
-$userObj = new User();
 
 $userObj->email = $userdata['email'];
 $userObj->password = $userdata['password'];
-$userObj->name = $userdata['name'];
+$userObj->first_name = $userdata['first_name'];
 $userObj->emp_code = $userdata['empcode'];
-$userObj->role = 2;
+
 $userObj->status =1;
+
+
 
 $userExist = $users = DB::table('users')
         ->where('email', '=', Input::get('email'))
@@ -143,7 +215,7 @@ $userExist = $users = DB::table('users')
 
 //  User::where('email', '=', Input::get('email'))->where('password', '=', Hash::make(Input::get('password')))->first();
 
-//print_r(count($userExist)); die();	
+//print_r(count($userExist)); die();    
 
 if(count($userExist)==0)
 {
@@ -154,7 +226,7 @@ if($userObj->save())
 // $uu = array(
 // 'email'     => Input::get('email'),
 // 'password'  => Input::get('password'),
-// 	'status' => 1, 
+//      'status' => 1, 
 //     );
 
 
@@ -171,6 +243,10 @@ else
 return View::make('register')->with('message', 'User already existing');
 
 }
+
+}
+
+
 
 
 
@@ -376,8 +452,10 @@ $archive_company = DB::table('company')->where('id', '=', $id)->update(array('st
 }
 
 
+
+
 $list_companies = DB::table('company')
-        ->where('userid', '=', Auth::user()->id)
+        //->where('userid', '=', Auth::user()->id)
         ->where('status','=',1)
         ->get();
 
@@ -406,7 +484,7 @@ $active_company = DB::table('company')->where('id', '=', $id)->update(array('sta
 }
 
 $list_companies = DB::table('company')
-        ->where('userid', '=', Auth::user()->id)
+        ///->where('userid', '=', Auth::user()->id)
         ->where('status','=',0)
         ->get();
 
@@ -430,7 +508,7 @@ public function showCompanyInfo($id)
 
 
 $company_info = DB::table('company')
-        ->where('userid', '=', Auth::user()->id)
+        //->where('userid', '=', Auth::user()->id)
         ->Where('id', '=', $id)
         ->get();
 
@@ -445,6 +523,14 @@ return View::make('company_info')->with(array('company_info' => $company_info));
 
 public function displayDashboard()
 {
+
+
+//$user = new User;
+
+//echo Auth::user()->hasRole("employee");
+
+//exit;
+
 return View::make('dashboard'); // redirect the user to the login screen
 }
 
@@ -466,18 +552,91 @@ Display form for adding new User
 
 **/
 
-public function showUsers()
+public function showUsers($action='', $id=null)
 {
 
+
+if($id!=null)
+{
+if($action=='delete')
+
+$delete_user_info = DB::table('users')->where('id', '=', $id)->delete();
+
+else if($action=='deactive')
+
+$deactive_users = DB::table('users')->where('id', '=', $id)->update(array('Status'=> '0'));
+
+
+}
+
 $user_list = DB::table('users')
-        ->where('role', '=', '2')
-        ->Where('status', '=','1')
+       // ->where('role', '=', '2')
+        ->Where('Status', '=','1')
         ->get();
 
+        // echo '<pre>';
+        // print_r($user_list); exit;
 
 return View::make('list_users', array('user_list' => $user_list));
 
 }
+
+
+/*
+
+@Author Soumya kolloon
+
+Date: 11/03/2015
+
+show List of deactivated users
+***/
+
+public function showDeactiveUsers($action='', $id=null)
+{
+       
+        if($id!=null)
+        {
+        if($action=='active')
+        $active_user = DB::table('users')->where('id', '=', $id)->update(array('Status'=> '1'));
+        }
+
+        $user_list = DB::table('users')
+        ///->where('userid', '=', Auth::user()->id)
+        ->where('Status','=', 0)
+        ->get();
+
+        return View::make('list_users', array('user_list' => $user_list));
+}
+
+
+
+/*
+
+Edit Users info by id
+
+*
+**/
+
+public function editUser($id=null)
+{
+
+$user_info = DB::table('users')
+        ->Where('id', '=', $id)
+        ->Where('status', '=', 1)
+        ->get();
+
+if(!empty($user_info))
+
+return View::make('register')->with(array('user_info' =>  $user_info));
+
+//else
+
+//return View::make('add_company')->with(array('emessage' =>  "ooph!!! No active company available with the selected name"));
+
+
+}
+
+
 
 
 }

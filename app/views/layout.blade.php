@@ -22,10 +22,10 @@
                     
                     <ul class="nav navbar-nav">
                        	
-					<li><a a href="{{URL::to('')}}">Home</a></li>
+					<!-- <li><a a href="{{URL::to('')}}">Home</a></li> -->
 					
 					@if (Auth::guest()) 
-					<li><a href="{{URL::to('register')}}">Create User</a></li>
+					<!-- <li><a href="{{URL::to('register')}}">Create User</a></li> -->
 					<li><a href="{{URL::to('login')}}">Login</a></li>
 					</ul>
 					@else
@@ -42,22 +42,38 @@
   @if (!Auth::guest()) 
 <div class="leftsidebar" style="margin-top: 100px;">
  <ul class="mtree transit">
-      <li><a href="{{ URL::to('list_company') }}">My Company</a>
-      <ul>
-         <li><a href="{{ URL::to('list_company') }}">My Companies</a> </li>
+      
+      <li><a href="{{ URL::to('my_company_info') }}">My Company</a>
+     
+       
+         @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('account_manager') )
+         <ul>
+        <li><a href="{{ URL::to('list_company') }}">My Companies</a> </li>
+
         <li><a href="{{ URL::to('add_company') }}">Add Company</a>  </li>
-        <li><a href="#">Users</a>
-          <ul>
-      <li><a href="{{URL::to('list_users')}}">Active Users</a></li>
-      <li><a href="#">Deactivated Users</a></li>
-      <li><a href="{{ URL::to('register') }}">Add User</a></li>
-          </ul>
+       
+        <li><a href="{{ URL::to('list_company/action/archive') }}">Archived Companies</a>
+
+        </li>
+        </ul>
+        @endif
+
+          
         </li>
 
-         <li><a href="{{ URL::to('list_company/action/archive') }}">Archived Companies</a></li>
+        <li><a href="{{URL::to('list_users')}}">Users</a>
+      @if(Auth::user()->hasRole('admin'))  
+      <ul>
+      <li><a href="{{URL::to('list_users')}}">Active Users</a></li>
+      <li><a href="{{ URL::to('deactivate_user/action/deactive') }}">Deactivated Users</a></li>
+      <li><a href="{{ URL::to('register') }}">Add User</a></li>
+      </ul>
+      
+      @endif
+      </li>
+      
            
-          </ul>
-        </li>
+        
 </ul>
 </div>
 

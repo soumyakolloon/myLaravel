@@ -12,6 +12,10 @@
 </p>
 
 
+
+@if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('account_manager') )
+    
+        
 @if(empty($list_comp)!=1)
 
 
@@ -87,8 +91,49 @@
 
 @endif
 
+
+
+
+	<!-- check user role permission -->
+ @elseif(Auth::user()->hasRole('employee'))
+
+<!-- check any company existing -->
+@if(empty($list_comp)!=1)
+
+
+<table border="1">
+<tr>
+<th>Title</th>
+<th>Description</th>
+<th>Address</th>
+
+</tr>
+
+@foreach($list_comp as $lc)
+<tr>
+
+<td><a href="{{URL::to('company_info')}}/id/<?php echo $lc->id; ?>">{{$lc->company_name}}</a></td>
+<td>{{$lc->description}}</td>
+<td>{{$lc->address}}, {{$lc->city}}, {{$lc->country}}</td>
+</tr>
+
+@endforeach
+
+</table>
+
+@else
+
+<!-- if no company dispaly alert message -->
+<div style="color:green">No Companies added Yet!!!!! </p></div>
+
 @endif
-	
+
+
+
+@endif
+
+@endif
+
 @stop
 
 

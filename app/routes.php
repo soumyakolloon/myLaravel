@@ -11,9 +11,15 @@
 |
 */
 
+
+
 Route::get('dashboard', array('uses' => 'HomeController@displayDashboard'));
 
-Route::get(' ', ('HomeController@showWelcome'));
+//route to landing page on both logout and login mode
+
+Route::get('/', ('HomeController@showWelcome'));
+
+Route::get('my_company_info', ('HomeController@showWelcome'));
 
 //get login form
 
@@ -81,8 +87,24 @@ Route::get('list_company/action/{archive}',array('uses' => 'HomeController@showA
 Route::get('list_users',array('uses' => 'HomeController@showUsers'));
 
 
+//Edit a user info by Id
+
+Route::get('register/id/{id}',array('uses' => 'HomeController@editUser'));
 
 
+//Delete a company by id
+
+Route::get('delete_user/action/{delete}/id/{id}',array('uses' => 'HomeController@showUsers'));
 
 
+//Deactivate the user by id
 
+Route::get('deactive_user/action/{action}/id/{id}',array('uses' => 'HomeController@showUsers'));
+
+//Get list of deactivated users
+
+Route::get('deactivate_user/action/{deactive}',array('uses' => 'HomeController@showDeactiveUsers'));
+
+//Active the user by id
+
+Route::get('active_user/action/{action}/id/{id}',array('uses' => 'HomeController@showDeactiveUsers'));
