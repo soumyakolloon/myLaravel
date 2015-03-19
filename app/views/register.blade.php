@@ -7,7 +7,7 @@
 		@endif
 			
 			{{ Form::open(array('url' => 'register')) }}
-			<h2>Registration</h2>
+			<h2>Add New User</h2>
 			<!-- if there are login errors, show them here -->
 	
 	<div class="form-group">
@@ -74,7 +74,7 @@
     {{ Form::password('password', array('class'=>'form-control')) }}
 		</div>	
 	<div class="form-group">	
-	<?php echo Form::submit('Create User', array('class'=>'btn btn-lg btn-primary')) ; ?>
+	<?php echo Form::submit('Add User', array('class'=>'btn btn-lg btn-primary')) ; ?>
 </div>
 	@endif	
 

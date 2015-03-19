@@ -1,6 +1,6 @@
 <?php
 
-class CompanyController extends \BaseController {
+class LeaveController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -14,13 +14,27 @@ class CompanyController extends \BaseController {
 
 
 	/**
-	 * Show the form for creating a new resource.
+	 * Show the form for creating a new leave.
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public function showLeavesForm()
 	{
-		//
+		
+		//Retrieve the leave types from database
+
+		$leave_type_info = DB::table('leave_types')->get();
+        
+        foreach($leave_type_info as $lvt)
+        {
+        	$lt[$lvt->id] = $lvt->types;
+        	//$lt['type'] = $lvt->types;
+        }
+
+		
+
+		return View::make('apply_leave', array('leave_types' => $lt));
+
 	}
 
 

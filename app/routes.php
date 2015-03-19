@@ -108,3 +108,10 @@ Route::get('deactivate_user/action/{deactive}',array('uses' => 'HomeController@s
 //Active the user by id
 
 Route::get('active_user/action/{action}/id/{id}',array('uses' => 'HomeController@showDeactiveUsers'));
+
+
+/*Leave management section starts from here**/
+
+//Apply for new leave form
+
+Route::get('apply_leave',array('uses' => 'LeaveController@showLeavesForm'));

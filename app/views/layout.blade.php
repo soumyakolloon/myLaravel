@@ -7,6 +7,7 @@
 	<!--	<link rel="stylesheet" href='../css/bootstrap.min.css'>-->
 	
 	<link rel="stylesheet" href='{{URL::to('/')}}/css/bootstrap.css'>
+   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
   <link rel='stylesheet prefetch' href='https://cdn.jsdelivr.net/foundation/5.0.2/css/foundation.css'>
   <link href="{{URL::to('/')}}/css/mtree.css" rel="stylesheet" type="text/css">
      {{ asset('css/mtree.css') }} 
@@ -72,7 +73,15 @@
       @endif
       </li>
       
-           
+      <li><a href="#">Leave Management</a>
+      <ul>
+        <li><a href="{{URL::to('apply_leave')}}">Apply Leave</a></li>
+        <li><a href="#">Holiday Calendar</a></li>
+        <li><a href="#">Leave Summary</a></li>
+
+      </ul>
+
+   </li>        
         
 </ul>
 </div>
@@ -97,11 +106,14 @@
 
 
   <!-- Scripts are placed here -->
+ 
       <script  src='{{URL::to('/')}}/js/jquery-1.10.2.js'></script>
     
 	     <script  src='{{URL::to('/')}}/js/bootstrap.js'></script>
-
-
+  <!-- Load jQuery UI Main JS  -->
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    
+   
 
 <script src='http://cdnjs.cloudflare.com/ajax/libs/velocity/0.2.1/jquery.velocity.min.js'></script> 
 
@@ -120,23 +132,17 @@ $(document).ready(function() {
     s.find('ul').append('<li>' + val + '</li>');
   });
   
-  // s.find('button.skin').each(function(index){
-  //   $(this).on('click.mtree-skin-selector', function(){
-  //    // s.find('button.skin.active').removeClass('active');
-  //     $(this).addClass('active');
-  //   //  mtree.removeClass(skins.join(' ')).addClass(skins[index]);
-  //   });
-  // })
-  // s.find('button:first').addClass('active');
-  // s.find('.csl').on('click.mtree-close-same-level', function(){
-  //   $(this).toggleClass('active'); 
-  // });
+  
+  /* This is the function that will get executed after the DOM is fully loaded */
+ 
+    $(".datepicker").datepicker({
+      changeMonth: true,//this option for allowing user to select month
+      changeYear: true //this option for allowing user to select from year range
+    });
+ 
 });
 </script>
 
-
-
-
-    
-  </body>
+  
+</body>
 </html>
