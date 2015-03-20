@@ -115,3 +115,8 @@ Route::get('active_user/action/{action}/id/{id}',array('uses' => 'HomeController
 //Apply for new leave form
 
 Route::get('apply_leave',array('uses' => 'LeaveController@showLeavesForm'));
+
+//Process new Leave form
+
+Route::post('apply_leave', array('uses' => 'LeaveController@doLeavesForm'));
+

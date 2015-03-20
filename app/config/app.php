@@ -123,6 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
 		'mnshankar\RoleBasedAuthority\RoleBasedAuthorityServiceProvider',
+		'Arrilot\Widgets\ServiceProvider',
 
 	),
 
@@ -191,6 +192,8 @@ return array(
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
 		'Authority'        => 'mnshankar\RoleBasedAuthority\Facades\Authority',
+		'Widget'       => 'Arrilot\Widgets\Facade',
+    	'AsyncWidget'  => 'Arrilot\Widgets\AsyncFacade',
 
 	),
 

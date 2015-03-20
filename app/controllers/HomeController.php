@@ -65,7 +65,7 @@ return Redirect::to('login')
 ->withErrors($validator) // send back all errors to the login form
 ->withInput(Input::except('password')); // send back the input (not the password) so that we can repopulate the form
 } else {
-
+ 
 // create our user data for the authentication
 $userdata = array(
 'email'     => Input::get('email'),

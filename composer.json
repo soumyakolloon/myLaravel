@@ -8,7 +8,8 @@
 		"laravel/framework": "4.2.*",
 		"way/generators": "2.*",
 		"mnshankar/role-based-authority": "dev-master",
-		 "machuga/authority" : "dev-master"
+		 "machuga/authority" : "dev-master",
+		"arrilot/laravel-widgets": "~1.0"
 
 	},
 	"autoload": {
