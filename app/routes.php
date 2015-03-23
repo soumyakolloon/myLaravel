@@ -120,3 +120,18 @@ Route::get('apply_leave',array('uses' => 'LeaveController@showLeavesForm'));
 
 Route::post('apply_leave', array('uses' => 'LeaveController@doLeavesForm'));
 
+/**End of Leave management section starts from here**/
+
+//PM user section starts here
+
+//Show add pm user form
+
+Route::get('add_pm_user', array('uses' => 'HomeController@showAddPMuserForm'));
+
+//Do add pm user form
+
+Route::post('add_pm_user', array('uses' => 'HomeController@doAddPMuserForm'));
+
+//List pm user form
+
+Route::get('list_pm_users', array('uses' => 'HomeController@showPMusers'));

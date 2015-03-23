@@ -223,6 +223,7 @@ if($userObj->save())
 {
 
 
+
 // $uu = array(
 // 'email'     => Input::get('email'),
 // 'password'  => Input::get('password'),
@@ -636,7 +637,113 @@ return View::make('register')->with(array('user_info' =>  $user_info));
 
 }
 
+//Display add_pm_form
+
+public function showAddPMuserForm()
+{
+    
+    return View::make('add_pm_user');
+
+}
+
+//process add_pm_form
+public function doAddPMuserForm()
+{
+
+//   $rules = array(
+// 'firstname'    => 'required', 
+// 'lastname'    => 'required',
+// 'description'    => 'required',
+// 'b_day'    => 'required',
+// 'gender'    => 'required',
+// 'password'    => 'required',
+// 'email' => 'required|email',
+// 'empcode' => 'required'
+
+// );
+
+// // run the validation rules on the inputs from the form
+
+// $validator = Validator::make(Input::all(), $rules);
+
+// // if the validator fails, redirect back to the form
+
+// if ($validator->fails()) {
+//    // echo 'fail'; exit;
+// return Redirect::to('add_pm_user')
+//  ->withErrors($validator)
+//  ->withInput(); // send back all errors to the login form
+
+// }
+// else
+// {
+
+$userObj = new User();
+
+$userObj->first_name = Input::get('first_name');  
+$userObj->last_name = Input::get('last_name');
+$userObj->email = Input::get('email');
+$userObj->password = Input::get('password');
+$userObj->status = "1";
+$userObj->emp_code = Input::get('empcode');
+$userObj->description = Input::get('description');
+$userObj->gender = Input::get('gender')[0];
+$userObj->phone = Input::get('phone');
+$userObj->birth_date = Input::get('birth_day');
+$userObj->job_title = Input::get('job_title');
+
+
+// echo '<pre>';
+// print_r(Input::get('gender'));
+// exit;
+
+if($userObj->save())
+{
+if(Input::get('role_id')=="account_manager")
+{
+    //Findout the role id of the user
+    $role_Obj = new Role();
+    $role = DB::table('roles')->select('id')
+        ->where('role_name', '=', Input::get('role_id'))
+        ->first();
+
+  $user_id = $userObj->id;
+
+ $role_userObj = new RoleUser();
+
+ $role_userObj->role_id = $role->id;
+ $role_userObj->user_id = $user_id;
+
+ $role_userObj->save();
+
+
+ return View::make('add_pm_user');
+
+}
+}
+//}
+
+
+}
+
+//list the pm users from table
+
+public function showPMusers()
+{
+
+       $users = DB::table('users')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('roles', 'roles.id', '=', 'role_user.role_id')
+                ->where('roles.role_name', '=', 'account_manager')
+                ->get();
+
+       return View::make('list_users', array('user_list'=>$users));
+
+}
 
 
 
 }
+
+
+

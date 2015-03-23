@@ -1,4 +1,6 @@
-<?php namespace App\Widgets;
+<?php 
+
+namespace App\Widgets;
 
 use Arrilot\Widgets\AbstractWidget;
 

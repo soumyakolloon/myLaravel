@@ -138,8 +138,8 @@
 
 
 	@endif
-@yield('widget')
-{!! Widget::recentNews() !!}
+
+@recentNews
 
 
 
