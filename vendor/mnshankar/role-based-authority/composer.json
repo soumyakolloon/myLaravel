@@ -1,0 +1,22 @@
+{
+    "name": "mnshankar/role-based-authority",
+    "description": "Modifies Authority-L4 to use Roles (instead of users) as the central unit of previlege management",
+    "keywords": ["Laravel4","RBAC", "Authorization", "Roles"],
+    "authors": [
+        {
+            "name": "Shankar Manamalkav",
+            "email": "mnshankar@yahoo.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.2.*",
+        "machuga/authority" : "2.1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "mnshankar\\RoleBasedAuthority": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
