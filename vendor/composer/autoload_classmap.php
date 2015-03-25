@@ -19,6 +19,8 @@ return array(
     'Authority\\RuleAlias' => $vendorDir . '/machuga/authority/src/Authority/RuleAlias.php',
     'Authority\\RuleRepository' => $vendorDir . '/machuga/authority/src/Authority/RuleRepository.php',
     'BaseController' => $baseDir . '/app/controllers/BaseController.php',
+    'Bllim\\LaravelToJqueryValidation\\FormBuilder' => $vendorDir . '/bllim/laravel-to-jquery-validation/src/Bllim/LaravelToJqueryValidation/FormBuilder.php',
+    'Bllim\\LaravelToJqueryValidation\\LaravelToJqueryValidationServiceProvider' => $vendorDir . '/bllim/laravel-to-jquery-validation/src/Bllim/LaravelToJqueryValidation/LaravelToJqueryValidationServiceProvider.php',
     'Boris\\Boris' => $vendorDir . '/d11wtq/boris/lib/Boris/Boris.php',
     'Boris\\CLIOptionsHandler' => $vendorDir . '/d11wtq/boris/lib/Boris/CLIOptionsHandler.php',
     'Boris\\ColoredInspector' => $vendorDir . '/d11wtq/boris/lib/Boris/ColoredInspector.php',

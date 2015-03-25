@@ -553,32 +553,41 @@ Display form for adding new User
 
 **/
 
-public function showUsers($action='', $id=null)
+public function showUsers($action='', $id=null, $page_key=null)
 {
+
 
 
 if($id!=null)
 {
+
+
 if($action=='delete')
-
+{
 $delete_user_info = DB::table('users')->where('id', '=', $id)->delete();
-
+}
 else if($action=='deactive')
-
+{
 $deactive_users = DB::table('users')->where('id', '=', $id)->update(array('Status'=> '0'));
-
+}
 
 }
 
 $user_list = DB::table('users')
        // ->where('role', '=', '2')
         ->Where('Status', '=','1')
+        
         ->get();
+ 
+      
 
-        // echo '<pre>';
-        // print_r($user_list); exit;
+        if($page_key==null)
+            $page_key = 'list_users';
 
-return View::make('list_users', array('user_list' => $user_list));
+       
+
+
+return View::make('list_users', array('user_list' => $user_list, 'page_key'=>$page_key));
 
 }
 
@@ -594,7 +603,7 @@ show List of deactivated users
 
 public function showDeactiveUsers($action='', $id=null)
 {
-       
+
         if($id!=null)
         {
         if($action=='active')
@@ -603,10 +612,14 @@ public function showDeactiveUsers($action='', $id=null)
 
         $user_list = DB::table('users')
         ///->where('userid', '=', Auth::user()->id)
-        ->where('Status','=', 0)
+        ->where('Status','=', '0')
         ->get();
 
-        return View::make('list_users', array('user_list' => $user_list));
+        // echo '<pre>';
+        // print_r($user_list);
+        // die();
+
+        return View::make('list_users', array('user_list' => $user_list, 'page_key' =>'list_users'));
 }
 
 
@@ -618,17 +631,21 @@ Edit Users info by id
 *
 **/
 
-public function editUser($id=null)
+public function editUser($id=null, $page_key=null)
 {
+
+$id = Crypt::decrypt($id);
 
 $user_info = DB::table('users')
         ->Where('id', '=', $id)
         ->Where('status', '=', 1)
         ->get();
 
+$user_info[0]->page_key = Crypt::decrypt($page_key);
+
 if(!empty($user_info))
 
-return View::make('register')->with(array('user_info' =>  $user_info));
+return View::make('add_pm_user')->with(array('user_info' =>  $user_info));
 
 //else
 
@@ -650,7 +667,7 @@ public function showAddPMuserForm()
 public function doAddPMuserForm()
 {
 
-//   $rules = array(
+//  $rules = array(
 // 'firstname'    => 'required', 
 // 'lastname'    => 'required',
 // 'description'    => 'required',
@@ -678,12 +695,15 @@ public function doAddPMuserForm()
 // else
 // {
 
+
 $userObj = new User();
+
+//Get Inputs
 
 $userObj->first_name = Input::get('first_name');  
 $userObj->last_name = Input::get('last_name');
 $userObj->email = Input::get('email');
-$userObj->password = Input::get('password');
+$userObj->password = Hash::make(Input::get('password'));
 $userObj->status = "1";
 $userObj->emp_code = Input::get('empcode');
 $userObj->description = Input::get('description');
@@ -691,53 +711,196 @@ $userObj->gender = Input::get('gender')[0];
 $userObj->phone = Input::get('phone');
 $userObj->birth_date = Input::get('birth_day');
 $userObj->job_title = Input::get('job_title');
+$user_edit_id = Input::get('user_edit_id');
 
+//Check whether the input get for edit or save
 
-// echo '<pre>';
-// print_r(Input::get('gender'));
-// exit;
+if(isset($user_edit_id) && $user_edit_id!='')
+{
+   
+    User::where('id', $user_edit_id)->update(array(
+    'first_name'    =>  $userObj->first_name,
+    'last_name' => $userObj->last_name,
+    'email' =>  $userObj->email,
+    'emp_code' => $userObj->emp_code,
+    'description'=>$userObj->description,
+    'gender' => $userObj->gender,
+    'phone' => $userObj->phone,
+    'job_title' => $userObj->job_title,
+    'birth_date' => $userObj->birth_date,
+    'status' => 1,
+
+    ));
+
+    if(Input::get('page_key')!='')
+    {
+        if(Input::get('page_key')=='list_pm_users')
+            return $this->showPMusers(Input::get('page_key'));
+
+        else
+            return $this->showUsers(Input::get('page_key'));
+    }
+    
+ 
+
+}
+
+else
+{
+
+//Check user existence to avoid duplication
+if(User::where('email', '=', Input::get('email'))->orwhere('emp_code', '=', Input::get('empcode'))->exists()){
+
+ return View::make('add_pm_user')->with('message', 'wohooo!!!  User already existing')->withInput(Input::all());
+
+}
+else
+{
+
 
 if($userObj->save())
 {
-if(Input::get('role_id')=="account_manager")
-{
+    //Check if it is a pm user or normal user
+
+    if(Input::get('route')=="add_pm_user")
+    {
+        $role_name = 'account_manager';
+    }
+    else 
+    {
+        $role_name = 'employee';
+    } 
     //Findout the role id of the user
     $role_Obj = new Role();
     $role = DB::table('roles')->select('id')
-        ->where('role_name', '=', Input::get('role_id'))
+        ->where('role_name', '=', $role_name)
         ->first();
+     $user_id = $userObj->id;
+     $role_userObj = new RoleUser();
+     $role_userObj->role_id = $role->id;
+     $role_userObj->user_id = $user_id;
+     $role_userObj->save();
+  
 
-  $user_id = $userObj->id;
+     if(Input::get('page_key')!='')
+    {
+        if(Input::get('page_key')=='list_pm_users')
+            return $this->showPMusers(Input::get('page_key'));
 
- $role_userObj = new RoleUser();
+        else
+            return $this->showUsers(Input::get('page_key'));
+    }
+    
 
- $role_userObj->role_id = $role->id;
- $role_userObj->user_id = $user_id;
-
- $role_userObj->save();
+    //return View::make('add_pm_user')->with('message', 'User added Successfully');
 
 
- return View::make('add_pm_user');
+}
 
 }
 }
-//}
 
 
 }
+
+
 
 //list the pm users from table
 
-public function showPMusers()
+public function showPMusers($page_key=null)
 {
 
        $users = DB::table('users')
                 ->join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->join('roles', 'roles.id', '=', 'role_user.role_id')
                 ->where('roles.role_name', '=', 'account_manager')
+                ->where('Status', '=', '1')
                 ->get();
 
-       return View::make('list_users', array('user_list'=>$users));
+              
+       
+
+       return View::make('list_users', array('user_list'=>$users, 'page_key'=>$page_key));
+
+}
+
+
+
+//show new contract form
+
+public function showNewContracts()
+{
+
+    //Get Company names
+    $clients = DB::table("company")
+               ->get(); 
+
+
+    foreach($clients as $cl)
+    {
+            $clnts[$cl->id] = $cl->company_name;      
+        
+         
+
+    }
+
+
+    //Get account manger user list
+
+    $account_managers = DB::table('users')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('roles', 'roles.id', '=', 'role_user.role_id')
+                ->where('roles.role_name', '=', 'account_manager')
+                ->where('Status', '=', '1')
+                ->get();
+
+    foreach($account_managers as $actm)
+    {
+    
+    $name = $actm->first_name." ".$actm->last_name;
+
+    $actm_users[$actm->user_id] = $name;      
+    
+    }
+
+
+
+    //Get developer user list
+
+    $dev_users = DB::table('users')
+                ->leftJoin('role_user', 'users.id', '=', 'role_user.user_id')
+                ->leftJoin('roles', 'roles.id', '=', 'role_user.role_id')
+                ->where('roles.role_name', '=', 'employee')
+                ->where('Status', '=', '1')
+                ->get();
+
+    foreach($dev_users as $dv)
+    {
+    
+    $dev_name = $dv->first_name." ".$dv->last_name;
+
+    $dev_usr[$dv->user_id] = $name;      
+    
+    }
+
+
+        // echo '<pre>';
+        // print_r($actm_users);
+        // print_r($dev_usr);
+
+        // $queries = DB::getQueryLog();
+        // $last_query = end($queries);
+        // print_r($last_query);
+
+        //die();
+
+    
+
+    return View::make('new_contract', array('clients'=>$clnts, 
+                                            'actm_users'=>$actm_users,
+                                            'dev_users' => $dev_usr
+
+                                            ));
 
 }
 

@@ -12,11 +12,11 @@
   <link href="{{URL::to('/')}}/css/mtree.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="http://jqueryvalidation.org/files/demo/site-demos.css">
 
-     {{ asset('css/mtree.css') }} 
- <script  src='{{URL::to('/')}}/js/jquery-1.10.2.js'></script>
-  <script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
+  
+ <script  src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+ <script src="{{URL::to('/')}}/js/jquery.validate.js" ></script>
+<script src="{{URL::to('/')}}/packages/bllim/laravel-to-jquery-validation/jquery.validate.laravel.js"></script>
 
-    <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
 
 </head>
   <body>
@@ -73,7 +73,7 @@
       @if(Auth::user()->hasRole('admin'))  
       <ul>
       <li><a href="{{URL::to('list_users')}}">Active Users</a></li>
-      <li><a href="{{ URL::to('deactivate_user/action/deactive') }}">Deactivated Users</a></li>
+      <li><a href="{{ URL::to('deactivate_user/action/deactive/') }}">Deactivated Users</a></li>
       <li><a href="{{ URL::to('register') }}">Add User</a></li>
       </ul>
       
@@ -95,11 +95,21 @@
       <ul>
         <li><a href="{{URL::to('list_pm_users')}}">List PM Users</a></li>
         <li><a href="{{URL::to('add_pm_user')}}">Add PM users</a></li>
+           
+
+      </ul>
+
+   </li>  
+
+   <li><a href="#">Contracts</a>
+      <ul>
+      
+        <li><a href="{{URL::to('new_contract')}}">Create New Contracts</a></li>
             
 
       </ul>
 
-   </li>    
+   </li>      
         
 </ul>
 </div>
@@ -159,6 +169,14 @@ $(document).ready(function() {
       changeMonth: true,//this option for allowing user to select month
       changeYear: true, //this option for allowing user to select from year range
      //  minDate: 1
+      beforeShow: function (input, inst) {
+        setTimeout(function () {
+            inst.dpDiv.css({
+                top: 600,
+                
+            });
+        }, 0);
+    }
     });
  
 });

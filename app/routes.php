@@ -35,7 +35,7 @@ Route::get('logout', array('uses' => 'HomeController@doLogout'));
 
 //get Registration form
 
-Route::get('register', array('uses' => 'HomeController@showRegister'));
+Route::get('register', array('uses' => 'HomeController@showAddPMuserForm'));
 
 
 //process Registration form
@@ -89,17 +89,17 @@ Route::get('list_users',array('uses' => 'HomeController@showUsers'));
 
 //Edit a user info by Id
 
-Route::get('register/id/{id}',array('uses' => 'HomeController@editUser'));
+Route::get('register/id/{id}/page_key/{page_key}',array('uses' => 'HomeController@editUser'));
 
 
 //Delete a company by id
 
-Route::get('delete_user/action/{delete}/id/{id}',array('uses' => 'HomeController@showUsers'));
+Route::get('delete_user/action/{delete}/id/{id}/page_key/{page_key}',array('uses' => 'HomeController@showUsers'));
 
 
 //Deactivate the user by id
 
-Route::get('deactive_user/action/{action}/id/{id}',array('uses' => 'HomeController@showUsers'));
+Route::get('deactive_user/action/{action}/id/{id}/page_key/{page_key}',array('uses' => 'HomeController@showUsers'));
 
 //Get list of deactivated users
 
@@ -107,7 +107,7 @@ Route::get('deactivate_user/action/{deactive}',array('uses' => 'HomeController@s
 
 //Active the user by id
 
-Route::get('active_user/action/{action}/id/{id}',array('uses' => 'HomeController@showDeactiveUsers'));
+Route::get('active_user/action/{action}/id/{id}/page_key/{page_key}',array('uses' => 'HomeController@showDeactiveUsers'));
 
 
 /*Leave management section starts from here**/
@@ -135,3 +135,7 @@ Route::post('add_pm_user', array('uses' => 'HomeController@doAddPMuserForm'));
 //List pm user form
 
 Route::get('list_pm_users', array('uses' => 'HomeController@showPMusers'));
+
+//Display new contract form
+
+Route::get('new_contract', array('uses' => 'HomeController@showNewContracts'));
