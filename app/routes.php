@@ -144,3 +144,6 @@ Route::get('list_pm_users', array('uses' => 'HomeController@showPMusers'));
 
 Route::get('new_contract', array('uses' => 'HomeController@showNewContracts'));
 
+//Process contract form
+
+Route::post('new_contract', array('uses' => 'HomeController@doNewContracts'));

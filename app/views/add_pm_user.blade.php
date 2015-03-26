@@ -248,7 +248,7 @@
 				      required: true,
 				      email: true
 				    }, 
-			 'birth_day': {date:true}
+			 'birth_day': {required:true, date:true}
 			},
 
    // submitHandler: function(form) {
@@ -262,28 +262,7 @@
 @stop
 
 
-// $(document).ready(function(){
-// $("#add_pm_user_form").validate(function(){
-  
- 
-//   rules: {
-//     // simple rule, converted to {required:true}
-//     firstname: "required",
-//     // compound rule
-//     // email: {
-//     //  required: true,
-//     //  email: true
-//     // },
-//   },
 
-//   // submitHandler: function(form) {
-//   //   // do other things for a valid form
-//   //   form.submit();
-//   // }
-// });
-// });
-// Client side form validation ends here 
-</script>
 
 
 

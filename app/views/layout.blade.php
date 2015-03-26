@@ -12,19 +12,11 @@
   <link href="{{URL::to('/')}}/css/mtree.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="http://jqueryvalidation.org/files/demo/site-demos.css">
 
-<<<<<<< HEAD
-  
+ 
  <script  src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
  <script src="{{URL::to('/')}}/js/jquery.validate.js" ></script>
 <script src="{{URL::to('/')}}/packages/bllim/laravel-to-jquery-validation/jquery.validate.laravel.js"></script>
 
-=======
-     {{ asset('css/mtree.css') }} 
- <script  src='{{URL::to('/')}}/js/jquery-1.10.2.js'></script>
-  <script src="http://jqueryvalidation.org/files/dist/jquery.validate.min.js"></script>
-
-    <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
->>>>>>> 4929f751abe9786ed8fb5e1a11f38cd6b8a05fa8
 
 </head>
   <body>

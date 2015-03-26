@@ -720,7 +720,7 @@ $userObj->emp_code = Input::get('empcode');
 $userObj->description = Input::get('description');
 $userObj->gender = Input::get('gender')[0];
 $userObj->phone = Input::get('phone');
-$userObj->birth_date = Input::get('birth_day');
+$userObj->birth_date = date('Y-m-d', strtotime(str_replace('-', '/',  Input::get('birth_day'))));
 $userObj->job_title = Input::get('job_title');
 
 $user_edit_id = Input::get('user_edit_id');
@@ -821,7 +821,6 @@ if($userObj->save())
 
 public function showPMusers($page_key=null)
 
-
 {
 
        $users = DB::table('users')
@@ -853,16 +852,16 @@ public function showNewContracts()
 
     foreach($clients as $cl)
     {
-            $clnts[$cl->id] = $cl->company_name;      
+    
+    $clnts[$cl->id] = $cl->company_name;      
         
-         
-
     }
 
 
     //Get account manger user list
 
     $account_managers = DB::table('users')
+            
                 ->join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->join('roles', 'roles.id', '=', 'role_user.role_id')
                 ->where('roles.role_name', '=', 'account_manager')
@@ -871,53 +870,66 @@ public function showNewContracts()
 
     foreach($account_managers as $actm)
     {
-    
     $name = $actm->first_name." ".$actm->last_name;
-
     $actm_users[$actm->user_id] = $name;      
-    
     }
 
+     //Get developer user list
 
-
-    //Get developer user list
-
-    $dev_users = DB::table('users')
+            $dev_users = DB::table('users')
                 ->leftJoin('role_user', 'users.id', '=', 'role_user.user_id')
                 ->leftJoin('roles', 'roles.id', '=', 'role_user.role_id')
                 ->where('roles.role_name', '=', 'employee')
                 ->where('Status', '=', '1')
                 ->get();
 
-    foreach($dev_users as $dv)
-    {
-    
-    $dev_name = $dv->first_name." ".$dv->last_name;
+            foreach($dev_users as $dv)
+            {
+            $dev_name = $dv->first_name." ".$dv->last_name;
 
-    $dev_usr[$dv->user_id] = $name;      
-    
-    }
+            $dev_usr[$dv->user_id] = $dev_name;      
+            
+            }
 
-
-        // echo '<pre>';
-        // print_r($actm_users);
-        // print_r($dev_usr);
-
-        // $queries = DB::getQueryLog();
-        // $last_query = end($queries);
-        // print_r($last_query);
-
-        //die();
-
-    
-
+       
     return View::make('new_contract', array('clients'=>$clnts, 
                                             'actm_users'=>$actm_users,
-                                            'dev_users' => $dev_usr
+                                            'dev_users' => $dev_usr));
 
   
 }
 
+
+//Process contract form
+
+public function doNewContracts()
+{
+
+    $contractObj = new Contracts();
+
+    //Get Input values
+
+    $contractObj->client = Input::get('client');
+    $contractObj->client_manager = Input::get('client_manager');
+    $contractObj->supplier = Input::get('supplier');
+    $contractObj->supplier_manager = Input::get('supplier_manager');
+    $contractObj->supplier_programmer = Input::get('supplier_pgmr');
+    $contractObj->start_date = date('Y-m-d', strtotime(str_replace('-', '/', Input::get('start_date'))));
+    $contractObj->end_date = date('Y-m-d', strtotime(str_replace('-', '/',  Input::get('end_date'))));
+    $contractObj->client_price = Input::get('cl_price');
+    $contractObj->supplier_price = Input::get('sp_price');
+    $contractObj->fixed_price = Input::get('fx_price');
+    $contractObj->user_id = Auth::user()->id;
+
+    //echo '<pre>';
+   // print_r($contractObj); exit;
+
+    $contractObj->save();
+
+
+    return $this->showNewContracts();
+
+}
 
 
 }
