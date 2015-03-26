@@ -78,7 +78,9 @@ return array(
 	|
 	*/
 
+
 	'key' => 'bridge#%',
+
 
 	'cipher' => MCRYPT_RIJNDAEL_128,
 
@@ -124,6 +126,7 @@ return array(
 		'Way\Generators\GeneratorsServiceProvider',
 		'mnshankar\RoleBasedAuthority\RoleBasedAuthorityServiceProvider',
 		'Arrilot\Widgets\ServiceProvider',
+
 		'Bllim\LaravelToJqueryValidation\LaravelToJqueryValidationServiceProvider',
 
 	),

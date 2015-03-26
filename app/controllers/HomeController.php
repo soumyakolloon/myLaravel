@@ -553,6 +553,7 @@ Display form for adding new User
 
 **/
 
+
 public function showUsers($action='', $id=null, $page_key=null)
 {
 
@@ -576,6 +577,7 @@ $deactive_users = DB::table('users')->where('id', '=', $id)->update(array('Statu
 $user_list = DB::table('users')
        // ->where('role', '=', '2')
         ->Where('Status', '=','1')
+
         
         ->get();
  
@@ -588,6 +590,7 @@ $user_list = DB::table('users')
 
 
 return View::make('list_users', array('user_list' => $user_list, 'page_key'=>$page_key));
+
 
 }
 
@@ -612,6 +615,7 @@ public function showDeactiveUsers($action='', $id=null)
 
         $user_list = DB::table('users')
         ///->where('userid', '=', Auth::user()->id)
+
         ->where('Status','=', '0')
         ->get();
 
@@ -620,6 +624,7 @@ public function showDeactiveUsers($action='', $id=null)
         // die();
 
         return View::make('list_users', array('user_list' => $user_list, 'page_key' =>'list_users'));
+
 }
 
 
@@ -636,10 +641,12 @@ public function editUser($id=null, $page_key=null)
 
 $id = Crypt::decrypt($id);
 
+
 $user_info = DB::table('users')
         ->Where('id', '=', $id)
         ->Where('status', '=', 1)
         ->get();
+
 
 $user_info[0]->page_key = Crypt::decrypt($page_key);
 
@@ -667,7 +674,9 @@ public function showAddPMuserForm()
 public function doAddPMuserForm()
 {
 
+
 //  $rules = array(
+
 // 'firstname'    => 'required', 
 // 'lastname'    => 'required',
 // 'description'    => 'required',
@@ -696,6 +705,7 @@ public function doAddPMuserForm()
 // {
 
 
+
 $userObj = new User();
 
 //Get Inputs
@@ -704,6 +714,7 @@ $userObj->first_name = Input::get('first_name');
 $userObj->last_name = Input::get('last_name');
 $userObj->email = Input::get('email');
 $userObj->password = Hash::make(Input::get('password'));
+
 $userObj->status = "1";
 $userObj->emp_code = Input::get('empcode');
 $userObj->description = Input::get('description');
@@ -711,6 +722,7 @@ $userObj->gender = Input::get('gender')[0];
 $userObj->phone = Input::get('phone');
 $userObj->birth_date = Input::get('birth_day');
 $userObj->job_title = Input::get('job_title');
+
 $user_edit_id = Input::get('user_edit_id');
 
 //Check whether the input get for edit or save
@@ -808,12 +820,15 @@ if($userObj->save())
 //list the pm users from table
 
 public function showPMusers($page_key=null)
+
+
 {
 
        $users = DB::table('users')
                 ->join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->join('roles', 'roles.id', '=', 'role_user.role_id')
                 ->where('roles.role_name', '=', 'account_manager')
+
                 ->where('Status', '=', '1')
                 ->get();
 
@@ -900,8 +915,7 @@ public function showNewContracts()
                                             'actm_users'=>$actm_users,
                                             'dev_users' => $dev_usr
 
-                                            ));
-
+  
 }
 
 

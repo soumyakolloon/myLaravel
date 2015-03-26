@@ -4,6 +4,7 @@
 
 @if (!Auth::guest()) 
 
+<<<<<<< HEAD
 <!-- List all the companies added by logged in user in a tabular format -->
 
 <?php 
@@ -20,6 +21,13 @@
   @else
   <strong>List of PM Users</strong>
   @endif
+=======
+
+<!-- List all the companies added by logged in user in a tabular format -->
+
+<p style="color:#3366FF">
+	<strong>List of Users</strong>
+>>>>>>> 4929f751abe9786ed8fb5e1a11f38cd6b8a05fa8
 </p>
 
 <?php 
@@ -46,6 +54,7 @@
 
 @foreach($user_list as $lc)
 <tr>
+
 <?php 
 $page_key = Route::getCurrentRoute()->getPath();
 
@@ -60,6 +69,7 @@ $user_id = $lc->id;
 <td>{{$lc->email}}</td>
 <td>{{$lc->emp_code}}</td>
 @if(Auth::user()->hasRole('admin'))
+
 
 <td>
 @if($lc->Status==1)
@@ -77,8 +87,6 @@ $user_id = $lc->id;
 @endif
 
 
-</td>
-@endif
 </tr>
 
 
@@ -103,7 +111,9 @@ $user_id = $lc->id;
 
 <script>
 
+
   function Confirmaction(action, id, page_key)
+
   {
     
     if(action=='delete')
@@ -120,9 +130,11 @@ $user_id = $lc->id;
    
     if (x)
     {
+
     if(!page_key)
       page_key = 'list_users';
     window.open("{{URL::to('/')}}/"+action+"_user/action/"+action+"/id/"+ id+"/page_key/"+page_key, '_parent');
+
     //return true;
     }
     else

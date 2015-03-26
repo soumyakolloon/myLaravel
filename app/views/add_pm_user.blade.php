@@ -7,13 +7,14 @@
 		<p>{{$message}}</p>
 		@endif
 
-
 			{{ Form::open(array('url' => 'add_pm_user',  'id'=>'add_pm_user_form')) }}
 			@if(Route::getCurrentRoute()->getPath()=='add_pm_user')
 			<h2>Add PM User</h2>
 			@else
 			<h2>Add New User</h2>
 			@endif
+
+		
 			<!-- if there are login errors, show them here -->
 	
 	<div class="form-group">
@@ -27,7 +28,7 @@
     {{ $errors->first('birth_day') }}
     {{ $errors->first('gender') }}
     </div>
-	
+
 
 	<?php 
 	
@@ -71,23 +72,32 @@
 		
 	{{ Form::label('first_name', 'First Name') }}
     {{ Form::text('first_name', $first_name, $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder'=>'Your First Name')) }}
-	</div>	
-		
+
+			
 	<div class="form-group">
 		
 	{{ Form::label('last_name', 'Last Name') }}
+
     {{ Form::text('last_name', $last_name, $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder'=>'Your Last Name')) }}
+
+   
+
 	</div>	
 
 	<div class="form-group">
 		
 	{{ Form::label('email', 'Email') }}
+
     {{ Form::text('email', $email, $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder'=>'email')) }}
+
+    
+
 	</div>
 
 	<div class="form-group">
 		
 	{{ Form::label('description', 'Description') }}
+
     {{ Form::textarea('description', $description, $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder'=>'description')) }}
 
 	</div>	
@@ -95,7 +105,9 @@
 
 	<div class="form-group">
 	{{ Form::label('birth_day', 'Birth day') }}
+
     {{ Form::text('birth_day', $birth_date, $attributes = array('class'=>'form-control datepicker', 'width'=>'500'), array('placeholder'=>'birth_day')) }}
+
 	</div>	
 
 
@@ -122,23 +134,33 @@
 	<div class="form-group">
 		
     {{ Form::label('Employee Code', 'Employee Code') }}
+
     {{ Form::text('empcode', $emp_code, $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder' => 'Employee Code')) }}
+
 	</div>
 
 	<div class="form-group">
 		
     {{ Form::label('phone', 'Phone') }}
+
     {{ Form::text('phone', $phone, $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder' => 'Phone')) }}
+
 	
 	</div>
 
 	<div class="form-group">
 		
     {{ Form::label('job_title', 'Job Title') }}
+
     {{ Form::text('job_title', $job_title, $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder' => 'Job Title')) }}
 	</div>
 	
 	@if($password==null)
+
+    {{ Form::text('job_title', Input::old('job_title'), $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder' => 'Job Title')) }}
+	</div>
+	
+
 	<div class="form-group">
 		
 	{{ Form::label('password', 'Password') }}
@@ -150,6 +172,7 @@
 	<div class="form-group">
 	{{ Form::label('confpassword', 'Confirm Password') }}
     {{ Form::password('confpassword', array('class'=>'form-control')) }}
+
 	</div>	
 	@endif
 
@@ -191,9 +214,24 @@
 
 
 
+	</div>		
+	
+	<div class="form-group">
+
+		{{ Form::hidden('role_id','account_manager' , array('id' => 'role_id')) }}
+	<?php 
+	echo Form::submit('Add', array('class'=>'btn btn-lg btn-primary')) ; 
+	?>
+	{{ Form::close() }}	
+	
+	</div>
+@stop
+
+
 
 <script>
 // Client side form validation starts here
+
  $(document).ready(function(){
  $("#add_pm_user_form").validate({
    rules:  {
@@ -223,6 +261,29 @@
 </script>
 @stop
 
+
+// $(document).ready(function(){
+// $("#add_pm_user_form").validate(function(){
+  
+ 
+//   rules: {
+//     // simple rule, converted to {required:true}
+//     firstname: "required",
+//     // compound rule
+//     // email: {
+//     //  required: true,
+//     //  email: true
+//     // },
+//   },
+
+//   // submitHandler: function(form) {
+//   //   // do other things for a valid form
+//   //   form.submit();
+//   // }
+// });
+// });
+// Client side form validation ends here 
+</script>
 
 
 
