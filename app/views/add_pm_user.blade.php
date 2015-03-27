@@ -75,14 +75,10 @@
 
 			
 	<div class="form-group">
-		
 	{{ Form::label('last_name', 'Last Name') }}
 
     {{ Form::text('last_name', $last_name, $attributes = array('class'=>'form-control', 'width'=>'500'), array('placeholder'=>'Your Last Name')) }}
-
-   
-
-	</div>	
+ 	</div>	
 
 	<div class="form-group">
 		
@@ -225,7 +221,7 @@
 	{{ Form::close() }}	
 	
 	</div>
-@stop
+
 
 
 

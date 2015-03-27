@@ -4,16 +4,7 @@
 
 @if (!Auth::guest()) 
 
-<<<<<<< HEAD
 <!-- List all the companies added by logged in user in a tabular format -->
-
-<?php 
-
-// echo '<pre>';
-// print_r($user_list['page_key']);
-// exit;
-
-?>
 
 <p style="color:#3366FF">
   @if($page_key=='list_users')
@@ -21,22 +12,8 @@
   @else
   <strong>List of PM Users</strong>
   @endif
-=======
 
-<!-- List all the companies added by logged in user in a tabular format -->
 
-<p style="color:#3366FF">
-	<strong>List of Users</strong>
->>>>>>> 4929f751abe9786ed8fb5e1a11f38cd6b8a05fa8
-</p>
-
-<?php 
-
-// echo '<pre>';
-// print_r($user_list);
-// exit;
-
-?>
 
 @if(empty($user_list)!=1)
 
@@ -86,10 +63,8 @@ $user_id = $lc->id;
 @endif
 @endif
 
-
+@endif
 </tr>
-
-
 
 @endforeach
 
@@ -104,7 +79,7 @@ $user_id = $lc->id;
 
 @endif
 	
-@stop
+
 
 
 
@@ -144,3 +119,5 @@ $user_id = $lc->id;
 
 
 </script>
+
+@stop

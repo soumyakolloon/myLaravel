@@ -7,7 +7,7 @@ class HomeController extends BaseController {
 | Default Home Controller
 |--------------------------------------------------------------------------
 |
-Author: Soumya Kolloon
+  @Author: Soumya Kolloon
 -------------------
 | You may wish to use controllers instead of, or in addition to, Closure
 | based routes. That's great! Here is an example controller method to
@@ -586,7 +586,7 @@ $user_list = DB::table('users')
         if($page_key==null)
             $page_key = 'list_users';
 
-       
+
 
 
 return View::make('list_users', array('user_list' => $user_list, 'page_key'=>$page_key));
@@ -842,13 +842,16 @@ public function showPMusers($page_key=null)
 
 //show new contract form
 
-public function showNewContracts()
+public function showNewContracts($confmessage='')
 {
 
     //Get Company names
     $clients = DB::table("company")
                ->get(); 
 
+    $clnts = array();
+    $dev_usr = array();
+    $actm_users= array();
 
     foreach($clients as $cl)
     {
@@ -867,37 +870,63 @@ public function showNewContracts()
                 ->where('roles.role_name', '=', 'account_manager')
                 ->where('Status', '=', '1')
                 ->get();
+            if(!empty($account_managers))
+            {
+            foreach($account_managers as $actm)
+            {
+            $name = $actm->first_name." ".$actm->last_name;
+            $actm_users[$actm->user_id] = $name;      
+            }
+        }
+    
 
-    foreach($account_managers as $actm)
-    {
-    $name = $actm->first_name." ".$actm->last_name;
-    $actm_users[$actm->user_id] = $name;      
-    }
 
      //Get developer user list
 
             $dev_users = DB::table('users')
-                ->leftJoin('role_user', 'users.id', '=', 'role_user.user_id')
-                ->leftJoin('roles', 'roles.id', '=', 'role_user.role_id')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('roles', 'roles.id', '=', 'role_user.role_id')
                 ->where('roles.role_name', '=', 'employee')
                 ->where('Status', '=', '1')
                 ->get();
 
+
+            if(!empty($dev_users))
+            {
             foreach($dev_users as $dv)
             {
             $dev_name = $dv->first_name." ".$dv->last_name;
-
             $dev_usr[$dv->user_id] = $dev_name;      
             
             }
+            }
+    
 
+
+            // echo '<pre>';
+            // // $queries = DB::getQueryLog();
+            // // $last_query = end($queries);
+
+            // print_r($dev_usr);
+            // exit;
+
+
+        if(isset($confmessage))
+            $cnfmsg = $confmessage;
+        else
+            $cnfmsg = '';
        
-    return View::make('new_contract', array('clients'=>$clnts, 
+         return View::make('new_contract', array('clients'=>$clnts, 
                                             'actm_users'=>$actm_users,
-                                            'dev_users' => $dev_usr));
+                                            'dev_users' => $dev_usr,
+                                            'message' => $cnfmsg
+                                            ));
 
   
-}
+   }
+
+
+
 
 
 //Process contract form
@@ -905,6 +934,7 @@ public function showNewContracts()
 public function doNewContracts()
 {
 
+   
     $contractObj = new Contracts();
 
     //Get Input values
@@ -924,12 +954,50 @@ public function doNewContracts()
     //echo '<pre>';
    // print_r($contractObj); exit;
 
+    if(Contracts::where('client', '=', Input::get('client'))->orwhere('supplier', '=', Input::get('supplier'))->exists()){ 
+
+        $confmessage = "One contract with this client is already existing";
+    }
+    else
+    {
+
     $contractObj->save();
+    $confmessage = "Contract added successfully";
 
-
-    return $this->showNewContracts();
+    }
+    return $this->showNewContracts($confmessage);
 
 }
+
+
+
+//Show all contracts
+
+public function showContracts()
+{
+  /**Retrieve the contracts **/
+
+  $contract_list = DB::table('contracts')->get();
+
+  foreach($contract_list as $cntlst)
+  {
+    /*Get respective client, supplier and developer name **/
+   $client_name = DB::table('company')->select('company_name')->where('id', '=', $cntlst->client)->get();
+   $cntlst->client_name = $client_name[0]->company_name;
+   $developer_name = DB::table('users')->select('first_name')->where('id', '=', $cntlst->user_id)->get();
+   $cntlst->programmer_name = $developer_name[0]->first_name;
+   $supplier_name = $client_name = DB::table('company')->select('company_name')->where('id', '=', $cntlst->supplier)->get();
+   $cntlst->supplier_name = $supplier_name[0]->company_name;
+
+  }
+
+  
+  return View::make('list_contracts', array('contract_list' => $contract_list));
+
+
+}
+
+
 
 
 }

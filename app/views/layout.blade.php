@@ -106,6 +106,7 @@
    <li><a href="#">Contracts</a>
       <ul>
       
+       <li><a href="{{URL::to('list_contracts')}}">List Contracts</a></li>
         <li><a href="{{URL::to('new_contract')}}">Create New Contracts</a></li>
 
 

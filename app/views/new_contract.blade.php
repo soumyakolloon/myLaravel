@@ -28,7 +28,7 @@
 
 <div class="form-group">
    	{{Form::label('supplier','Supplier') }}
-   {{Form::select('supplier', $clients) }}
+   {{Form::select('supplier', array("1"=>'Bridge India', "2" =>'Bridge Ukrain')) }}
 </div>
 
 
@@ -40,10 +40,10 @@
 
 
 
-<div class="form-group">
+<!-- <div class="form-group">
    {{ Form::label('supplier_pgmr',"Supplier's Programmer") }}
    {{ Form::select('supplier_pgmr', $dev_users) }}
-</div>
+</div> -->
 
 
 <div class="form-group">
@@ -117,28 +117,25 @@
 <script>
 // Client side form validation starts here
 
- // $(document).ready(function(){
- // $("#new_contract_form").validate({
- //   rules:  {
- //   			'client': {required:true}, 
- //   			'client_manager':{required:true}, 
-	// 		'supplier':{required:true},
-	// 		'supplier_manager':{required:true},
-	// 		'supplier_pgmr':{required:true, number:true},
-	// 		'start_date':{ required:true, date:true},
-	// 		'end_date':{ required:true, date:true},
+ $(document).ready(function(){
+ $("#new_contract_form").validate({
+   rules:  {
+   			'client': {required:true}, 
+   			'client_manager':{required:true}, 
+			'supplier':{required:true},
+			'supplier_manager':{required:true},
+			'supplier_pgmr':{required:true, number:true},
+			'start_date':{ required:true, date:true},
+			'end_date':{ required:true, date:true},
 			
-	// 		'cl_price': {required:true,},
-	// 		'sp_price': {required:true},
-	// 		'fx_price': {required:true},
-	// 		'remarks': {required:true},
-	// 		'int_remarks':{required:true}
-	// 		},
+			'cl_price': {required:true,},
+			'sp_price': {required:true},
+			'fx_price': {required:true},
+			'remarks': {required:true},
+			'int_remarks':{required:true}
+			},
 
-   // submitHandler: function(form) {
-   // do other things for a valid form
-   //   form.submit();
-   // }
+   
 });
  });
 

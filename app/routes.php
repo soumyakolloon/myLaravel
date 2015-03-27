@@ -147,3 +147,7 @@ Route::get('new_contract', array('uses' => 'HomeController@showNewContracts'));
 //Process contract form
 
 Route::post('new_contract', array('uses' => 'HomeController@doNewContracts'));
+
+//List contracts
+
+Route::get('list_contracts', array('uses' => 'HomeController@showContracts'));
