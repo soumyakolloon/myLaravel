@@ -23,7 +23,17 @@
 <td>{{$ctrlist->end_date}}</td>
 <td>{{$ctrlist->programmer_name}}</td>
 <td>{{$ctrlist->supplier_name}}</td>
-<td>edit/delete/note</td>
+
+
+<td>
+
+<a href="{{URL::to('contract_info')}}/id/<?php echo Crypt::encrypt($ctrlist->id); ?>">Contract info</a> |
+
+<a href="{{URL::to('edit_contracts')}}/id/<?php echo Crypt::encrypt($ctrlist->id); ?>">Edit Contract info</a>
+
+</td>
+
+
 </tr>
 @endforeach
 

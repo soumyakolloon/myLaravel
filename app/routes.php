@@ -151,3 +151,13 @@ Route::post('new_contract', array('uses' => 'HomeController@doNewContracts'));
 //List contracts
 
 Route::get('list_contracts', array('uses' => 'HomeController@showContracts'));
+
+
+//Get the contract info by Id
+
+Route::get('contract_info/id/{id}', array('uses' => 'HomeController@showContracts'));
+
+
+//Get the contract info by Id
+
+Route::get('edit_contracts/id/{id}', array('uses' => 'HomeController@showNewContracts'));

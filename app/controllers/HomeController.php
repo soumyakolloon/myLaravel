@@ -842,10 +842,35 @@ public function showPMusers($page_key=null)
 
 //show new contract form
 
-public function showNewContracts($confmessage='')
+public function showNewContracts($id=null)
 {
+   
+    
+    $contract_info=array();
 
-    //Get Company names
+    if($id!=null)
+
+    $contract_id = Crypt::decrypt($id);
+
+    else
+
+    $contract_id=0;    
+
+    $routePathArray = explode('/', Route::getCurrentRoute()->getPath());
+
+
+    if($routePathArray[0]=='edit_contracts')
+    {
+        //Get contract details by id 
+
+        $contract_info = DB::table('contracts')->where('id', '=', $contract_id)->get();
+        
+
+       
+         
+    }
+    
+
     $clients = DB::table("company")
                ->get(); 
 
@@ -919,7 +944,8 @@ public function showNewContracts($confmessage='')
          return View::make('new_contract', array('clients'=>$clnts, 
                                             'actm_users'=>$actm_users,
                                             'dev_users' => $dev_usr,
-                                            'message' => $cnfmsg
+                                            'message' => $cnfmsg,
+                                            'contract_info'=>$contract_info
                                             ));
 
   
@@ -931,41 +957,80 @@ public function showNewContracts($confmessage='')
 
 //Process contract form
 
-public function doNewContracts()
+public function doNewContracts($id=null)
 {
 
-   
+ $routePathArray = explode('/', Route::getCurrentRoute()->getPath());
+
     $contractObj = new Contracts();
 
     //Get Input values
 
-    $contractObj->client = Input::get('client');
-    $contractObj->client_manager = Input::get('client_manager');
-    $contractObj->supplier = Input::get('supplier');
-    $contractObj->supplier_manager = Input::get('supplier_manager');
-    $contractObj->supplier_programmer = Input::get('supplier_pgmr');
-    $contractObj->start_date = date('Y-m-d', strtotime(str_replace('-', '/', Input::get('start_date'))));
-    $contractObj->end_date = date('Y-m-d', strtotime(str_replace('-', '/',  Input::get('end_date'))));
-    $contractObj->client_price = Input::get('cl_price');
-    $contractObj->supplier_price = Input::get('sp_price');
-    $contractObj->fixed_price = Input::get('fx_price');
-    $contractObj->user_id = Auth::user()->id;
+        $contractObj->client = Input::get('client');
+        $contractObj->client_manager = Input::get('client_manager');
+        $contractObj->supplier = Input::get('supplier');
+        $contractObj->supplier_manager = Input::get('supplier_manager');
+        $contractObj->supplier_programmer = Input::get('supplier_pgmr');
+        $contractObj->start_date = date('Y-m-d', strtotime(str_replace('-', '/', Input::get('start_date'))));
+        $contractObj->end_date = date('Y-m-d', strtotime(str_replace('-', '/',  Input::get('end_date'))));
+        $contractObj->client_price = Input::get('cl_price');
+        $contractObj->supplier_price = Input::get('sp_price');
+        $contractObj->fixed_price = Input::get('fx_price');
+        $contractObj->user_id = Auth::user()->id;
+
+
+     
+
 
     //echo '<pre>';
-   // print_r($contractObj); exit;
+  
 
-    if(Contracts::where('client', '=', Input::get('client'))->orwhere('supplier', '=', Input::get('supplier'))->exists()){ 
+
+         if(Input::get('route')=='new_contracts')
+        {
+        if(Contracts::where('client', '=', Input::get('client'))->orwhere('supplier', '=', Input::get('supplier'))->exists()){ 
 
         $confmessage = "One contract with this client is already existing";
-    }
-    else
-    {
+        }
+        else
+        {
 
-    $contractObj->save();
-    $confmessage = "Contract added successfully";
+        $contractObj->save();
+        $confmessage = "Contract added successfully";
 
-    }
-    return $this->showNewContracts($confmessage);
+        }
+
+         }
+       else
+       {
+
+       
+
+
+
+        $contract_id = Input::get('contract_id');
+        
+        Contracts::where('id', $contract_id)->update(array(
+'client'    =>  $contractObj->client,
+'client_manager' => $contractObj->client_manager,
+'supplier' =>  $contractObj->supplier,
+'supplier_manager' => $contractObj->supplier_manager,
+'start_date' => $contractObj->start_date,
+'end_date' => $contractObj->end_date,
+'client_price' =>  $contractObj->client_price,
+'supplier_price' => $contractObj->supplier_price,
+'fixed_price' => $contractObj->fixed_price,
+'user_id' => Auth::user()->id));
+
+        $confmessage = "Contract updated successfully";
+
+
+       }
+
+
+
+
+    return $this->showNewContracts()->with('message', $confmessage);
 
 }
 
@@ -973,26 +1038,88 @@ public function doNewContracts()
 
 //Show all contracts
 
-public function showContracts()
+    public function showContracts($id=null)
+    {
+
+
+    $routePathArray = explode('/', Route::getCurrentRoute()->getPath());
+
+    if($routePathArray[0]=='list_contracts')
+    {
+     //   if($id==null)
+     //{
+      /**Retrieve the entire contracts to list out**/
+      
+      $contract_list = DB::table('contracts')->get();
+
+      foreach($contract_list as $cntlst)
+      {
+        /*Get respective client, supplier and developer name **/
+
+       $client_name = DB::table('company')->select('company_name')->where('id', '=', $cntlst->client)->get();
+       $cntlst->client_name = $client_name[0]->company_name;
+       $developer_name = DB::table('users')->select('first_name')->where('id', '=', $cntlst->user_id)->get();
+       $cntlst->programmer_name = $developer_name[0]->first_name;
+
+       //$supplier_name = $client_name = DB::table('company')->select('company_name')->where('id', '=', $cntlst->supplier)->get();
+        
+        //echo '<pre>';
+        //print_r($developer_name[0]);
+      
+       $cntlst->supplier_name = "4";//$supplier_name[0]->company_name;
+
+      }
+
+
+
+      
+      return View::make('list_contracts', array('contract_list' => $contract_list));
+      }
+      
+      // else
+      // {
+        
+      //   $contract_id=Crypt::decrypt($id);
+
+      //   $contract_infobyid = DB::table('contracts')->where('id', '=', $contract_id)->get();
+
+
+
+      // }
+   
+
+else if($routePathArray[0]=='contract_info')
 {
-  /**Retrieve the contracts **/
 
-  $contract_list = DB::table('contracts')->get();
+   /**Information about a specific contracts**/
 
-  foreach($contract_list as $cntlst)
-  {
-    /*Get respective client, supplier and developer name **/
-   $client_name = DB::table('company')->select('company_name')->where('id', '=', $cntlst->client)->get();
-   $cntlst->client_name = $client_name[0]->company_name;
-   $developer_name = DB::table('users')->select('first_name')->where('id', '=', $cntlst->user_id)->get();
-   $cntlst->programmer_name = $developer_name[0]->first_name;
-   $supplier_name = $client_name = DB::table('company')->select('company_name')->where('id', '=', $cntlst->supplier)->get();
-   $cntlst->supplier_name = $supplier_name[0]->company_name;
+    $contract_id = Crypt::decrypt($id);
 
-  }
-
+    $contract_info = DB::table('contracts')->where('id', '=', $contract_id)->get();
+   
+   $client_name = DB::table('company')->select('company_name')->where('id', '=', $contract_info[0]->client)->get();
   
-  return View::make('list_contracts', array('contract_list' => $contract_list));
+   $contract_info[0]->client_name = $client_name[0]->company_name;
+   $developer_name = DB::table('users')->select('first_name')->where('id', '=', $contract_info[0]->user_id)->get();
+   $contract_info[0]->programmer_name = $developer_name[0]->first_name;
+   $supplier_name = $client_name = DB::table('company')->select('company_name')->where('id', '=', $contract_info[0]->supplier)->get();
+   $contract_info[0]->supplier_name = $supplier_name[0]->company_name;
+   $supplier_manager_name = DB::table('users')->select('first_name')->where('id', '=', $contract_info[0]->supplier_manager)->get();
+   $contract_info[0]->supplier_manager_name = $supplier_manager_name[0]->first_name;
+   $client_manager_name = DB::table('users')->select('first_name')->where('id', '=', $contract_info[0]->client_manager)->get();
+   $contract_info[0]->client_manager_name = $client_manager_name[0]->first_name;
+
+   // echo '<pre>';
+   // print_r($contract_info);
+   // exit;
+
+  //return View::make('contract_info', array('contract_info' => $contract_info));
+
+
+}
+
+
+//echo Route::getCurrentRoute()->getPath()->first; exit;
 
 
 }

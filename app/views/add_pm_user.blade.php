@@ -204,12 +204,7 @@
 	{{ Form::close() }}	
 	
 	</div>
-
-
-
-
-
-
+	
 	</div>		
 	
 	<div class="form-group">
