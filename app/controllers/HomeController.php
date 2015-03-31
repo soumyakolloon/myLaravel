@@ -960,9 +960,9 @@ public function showNewContracts($id=null)
 public function doNewContracts($id=null)
 {
 
- $routePathArray = explode('/', Route::getCurrentRoute()->getPath());
+        $routePathArray = explode('/', Route::getCurrentRoute()->getPath());
 
-    $contractObj = new Contracts();
+        $contractObj = new Contracts();
 
     //Get Input values
 
@@ -976,14 +976,11 @@ public function doNewContracts($id=null)
         $contractObj->client_price = Input::get('cl_price');
         $contractObj->supplier_price = Input::get('sp_price');
         $contractObj->fixed_price = Input::get('fx_price');
+        
+        $contractObj->remarks = Input::get('remarks');
+        $contractObj->internal_remarks = Input::get('int_remarks');
+
         $contractObj->user_id = Auth::user()->id;
-
-
-     
-
-
-    //echo '<pre>';
-  
 
 
          if(Input::get('route')=='new_contracts')
@@ -1004,23 +1001,22 @@ public function doNewContracts($id=null)
        else
        {
 
-       
-
-
 
         $contract_id = Input::get('contract_id');
         
-        Contracts::where('id', $contract_id)->update(array(
-'client'    =>  $contractObj->client,
-'client_manager' => $contractObj->client_manager,
-'supplier' =>  $contractObj->supplier,
-'supplier_manager' => $contractObj->supplier_manager,
-'start_date' => $contractObj->start_date,
-'end_date' => $contractObj->end_date,
-'client_price' =>  $contractObj->client_price,
-'supplier_price' => $contractObj->supplier_price,
-'fixed_price' => $contractObj->fixed_price,
-'user_id' => Auth::user()->id));
+      Contracts::where('id', $contract_id)->update(array(
+        'client'    =>  $contractObj->client,
+        'client_manager' => $contractObj->client_manager,
+        'supplier' =>  $contractObj->supplier,
+        'supplier_manager' => $contractObj->supplier_manager,
+        'start_date' => $contractObj->start_date,
+        'end_date' => $contractObj->end_date,
+        'client_price' =>  $contractObj->client_price,
+        'supplier_price' => $contractObj->supplier_price,
+        'fixed_price' => $contractObj->fixed_price,
+        'remarks' => $contractObj->remarks,
+        'internal_remarks'=>$contractObj->internal_remarks,
+        'user_id' => Auth::user()->id));
 
         $confmessage = "Contract updated successfully";
 
@@ -1036,7 +1032,7 @@ public function doNewContracts($id=null)
 
 
 
-//Show all contracts
+   //Show all contracts
 
     public function showContracts($id=null)
     {
@@ -1060,11 +1056,6 @@ public function doNewContracts($id=null)
        $cntlst->client_name = $client_name[0]->company_name;
        $developer_name = DB::table('users')->select('first_name')->where('id', '=', $cntlst->user_id)->get();
        $cntlst->programmer_name = $developer_name[0]->first_name;
-
-       //$supplier_name = $client_name = DB::table('company')->select('company_name')->where('id', '=', $cntlst->supplier)->get();
-        
-        //echo '<pre>';
-        //print_r($developer_name[0]);
       
        $cntlst->supplier_name = "4";//$supplier_name[0]->company_name;
 
@@ -1076,17 +1067,7 @@ public function doNewContracts($id=null)
       return View::make('list_contracts', array('contract_list' => $contract_list));
       }
       
-      // else
-      // {
-        
-      //   $contract_id=Crypt::decrypt($id);
-
-      //   $contract_infobyid = DB::table('contracts')->where('id', '=', $contract_id)->get();
-
-
-
-      // }
-   
+         
 
 else if($routePathArray[0]=='contract_info')
 {
@@ -1113,7 +1094,7 @@ else if($routePathArray[0]=='contract_info')
    // print_r($contract_info);
    // exit;
 
-  //return View::make('contract_info', array('contract_info' => $contract_info));
+  return View::make('contract_info', array('contract_info' => $contract_info));
 
 
 }
@@ -1124,6 +1105,59 @@ else if($routePathArray[0]=='contract_info')
 
 }
 
+
+// Add file form display
+
+public function showAddFile()
+{
+$message ='';
+
+return View::make('add_files');
+}
+
+// Process the add file form
+public function doAddFile()
+{
+
+// getting all of the post data
+  $file = array('image' => Input::file('image'));
+
+  // setting up rules
+  $rules = array('image' => 'required',); //mimes:jpeg,bmp,png and for max size max:10000
+ 
+  // doing the validation, passing post data, rules and the messages
+  $validator = Validator::make($file, $rules);
+
+  if ($validator->fails()) {
+    // send back to the page with the input data and errors
+    return View::make('add_files')->withInput()->withErrors($validator);
+  }
+
+  else {
+
+    // checking file is valid.
+    if (Input::file('image')->isValid()) {
+        
+          $destinationPath = 'uploads'; // upload path
+          $extension = Input::file('image')->getClientOriginalExtension(); // getting image extension
+          $fileName = rand(11111,99999).'.'.$extension; // renameing image
+          Input::file('image')->move($destinationPath, $fileName); // uploading file to given path
+          // sending back with message
+       
+        //  return $this->showContracts();
+
+      return View::make('add_files', array('msg'=>'File added successfully'));
+    }
+    else {
+      // sending back with error message.
+      Session::flash('error', 'uploaded file is not valid');
+      return View::make('add_file');
+    }
+
+  }
+
+
+}
 
 
 

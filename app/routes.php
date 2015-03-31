@@ -161,3 +161,11 @@ Route::get('contract_info/id/{id}', array('uses' => 'HomeController@showContract
 //Get the contract info by Id
 
 Route::get('edit_contracts/id/{id}', array('uses' => 'HomeController@showNewContracts'));
+
+//Get the add file form 
+
+Route::get('add_file/id/{id}', array('uses' => 'HomeController@showAddFile'));
+
+//Process the add file form 
+
+Route::post('add_file', array('uses' => 'HomeController@doAddFile'));

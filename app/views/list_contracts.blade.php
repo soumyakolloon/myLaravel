@@ -3,6 +3,8 @@
 @section('content')
 
 
+ 
+
 <table border="1">
 
 <tr>
@@ -30,6 +32,8 @@
 <a href="{{URL::to('contract_info')}}/id/<?php echo Crypt::encrypt($ctrlist->id); ?>">Contract info</a> |
 
 <a href="{{URL::to('edit_contracts')}}/id/<?php echo Crypt::encrypt($ctrlist->id); ?>">Edit Contract info</a>
+
+<a href="{{URL::to('add_file')}}/id/<?php echo Crypt::encrypt($ctrlist->id); ?>">Add Files</a>
 
 </td>
 

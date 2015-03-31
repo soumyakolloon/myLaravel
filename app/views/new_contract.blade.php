@@ -77,7 +77,7 @@
 
 <div class="form-group">
    	{{Form::label('supplier','Supplier') }}
-   {{Form::select('supplier', array("1"=>'Bridge India', "2" =>'Bridge Ukrain'), $supplier) }}
+   {{Form::select('supplier', $clients, $supplier) }}
 </div>
 
 
@@ -204,12 +204,6 @@
 // Client side form validation ends here 
 
 /***
-
-PMT fill ups
-
-Updates as well
-
-Completed the PM user section and started with contracts section. New contracts and list contracts are done 
 
 Done contracts info and edit contracts section
 

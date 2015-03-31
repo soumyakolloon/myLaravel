@@ -10,7 +10,9 @@
 		"mnshankar/role-based-authority": "dev-master",
 		 "machuga/authority" : "dev-master",
 		"arrilot/laravel-widgets": "~1.0",
-		 "bllim/laravel-to-jquery-validation": "*"
+		 "bllim/laravel-to-jquery-validation": "*",
+		 "davispeixoto/laravel-4-solr": "dev-master"
+
 
 	},
 	"autoload": {
@@ -41,3 +43,4 @@
 	},
 	"minimum-stability": "stable"
 }
+ 
